@@ -1,0 +1,112 @@
+name: CI/CD Pipeline — 100% HUMANITY
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  # ==============================================================================
+  # 1. CONTINUOUS INTEGRATION (Tests, Migrations, Static Assets)
+  # ==============================================================================
+  test:
+    name: 🧪 Run Automated Tests & Checks
+    runs-on: ubuntu-latest
+
+    env:
+      DEBUG: "True"
+      SECRET_KEY: "ci-testing-dummy-secret-key-100-humanity"
+      ALLOWED_HOSTS: "127.0.0.1,localhost,testserver"
+
+    steps:
+      - name: 📥 Check out repository code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python 3.10
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+          cache: "pip"
+
+      - name: 📦 Install dependencies
+        run: |
+          python -m pip install --upgrade pip setuptools
+          pip install -r requirements.txt
+
+      - name: 🔍 Check for missing database migrations
+        run: |
+          python manage.py makemigrations --check --dry-run
+
+      - name: 🧪 Execute Django test suite
+        run: |
+          python manage.py test --verbosity=2
+
+      - name: 🎨 Verify static assets compilation
+        run: |
+          python manage.py collectstatic --noinput
+
+  # ==============================================================================
+  # 2. CONTINUOUS DEPLOYMENT (Deploy to PythonAnywhere)
+  # ==============================================================================
+  deploy:
+    name: 🚀 Deploy to PythonAnywhere
+    needs: test
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Check out repository code
+        uses: actions/checkout@v4
+
+      - name: 🐍 Set up Python for deployment script
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.10"
+
+      - name: 📦 Install script requirements
+        run: |
+          python -m pip install requests
+
+      - name: 🔑 Check if PythonAnywhere Secrets are configured
+        id: check_secrets
+        run: |
+          if [ -n "${{ secrets.PA_API_TOKEN }}" ] && [ -n "${{ secrets.PA_USERNAME }}" ]; then
+            echo "configured=true" >> $GITHUB_OUTPUT
+            echo "✅ PythonAnywhere credentials detected in GitHub Secrets."
+          else
+            echo "configured=false" >> $GITHUB_OUTPUT
+            echo "ℹ️ PythonAnywhere secrets (PA_USERNAME, PA_API_TOKEN) are not yet configured."
+          fi
+
+      - name: 🚀 Deploy & Reload PythonAnywhere Web App
+        if: steps.check_secrets.outputs.configured == 'true'
+        env:
+          PA_USERNAME: ${{ secrets.PA_USERNAME }}
+          PA_API_TOKEN: ${{ secrets.PA_API_TOKEN }}
+          PA_DOMAIN: ${{ secrets.PA_DOMAIN }}
+          PA_VENV_NAME: ${{ secrets.PA_VENV_NAME || 'humanity-env' }}
+          PA_PROJECT_DIR: ${{ secrets.PA_PROJECT_DIR || '100-humanity' }}
+          PA_BRANCH: "main"
+        run: |
+          python scripts/deploy_pythonanywhere.py
+
+      - name: 📋 Setup Instructions Notice
+        if: steps.check_secrets.outputs.configured == 'false'
+        run: |
+          echo "================================================================================"
+          echo "💡 NEXT STEP TO ENABLE AUTOMATIC DEPLOYMENT:"
+          echo "To allow GitHub Actions to automatically update and reload your PythonAnywhere site:"
+          echo "1. Go to PythonAnywhere -> Account -> 'API token' tab -> click 'Create a new API token'."
+          echo "2. Go to your GitHub repository -> Settings -> Secrets and variables -> Actions."
+          echo "3. Add these two Repository Secrets:"
+          echo "   - PA_USERNAME : Your PythonAnywhere username"
+          echo "   - PA_API_TOKEN: Your PythonAnywhere API token"
+          echo "   - PA_DOMAIN   : (Optional) yourusername.pythonanywhere.com"
+          echo "Once added, every 'git push' to main will automatically test and deploy your app!"
+          echo "================================================================================"

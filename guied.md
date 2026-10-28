@@ -254,9 +254,45 @@ You do **not** need to SSH into PythonAnywhere or edit server files whenever you
 
 ---
 
-## Routine Maintenance & Updating Code
+## ⚡ Automated CI/CD with GitHub Actions (Zero-Manual-Work Deployment)
 
-Whenever you push new code or commits from your local machine to GitHub:
+We have configured a fully automated CI/CD pipeline in [`.github/workflows/ci-cd.yml`](.github/workflows/ci-cd.yml).
+
+### How It Works:
+1. **Continuous Integration (CI)**:
+   - Every time you push code or open a pull request to `main`, GitHub spins up an automated cloud runner.
+   - It installs Python, runs all 28 automated tests, verifies migrations, and checks static assets.
+   - If any test breaks, GitHub alerts you and stops the deployment.
+2. **Continuous Deployment (CD)**:
+   - When all tests pass on the `main` branch, the runner automatically connects to PythonAnywhere via its official REST API.
+   - It pulls the latest code (`git pull origin main`), applies new database migrations (`python manage.py migrate`), compresses static files (`python manage.py collectstatic`), and reloads your web application instantly.
+
+### One-Time Setup for GitHub Secrets:
+To connect your GitHub repository to PythonAnywhere:
+
+1. **Get your PythonAnywhere API Token**:
+   - Log into PythonAnywhere &rarr; Click **Account** (top right) &rarr; Go to the **API token** tab.
+   - Click **Create a new API token** and copy the generated token string.
+
+2. **Add Secrets to GitHub**:
+   - In your GitHub project page, click **Settings** (tab at the top) &rarr; **Secrets and variables** (left sidebar) &rarr; **Actions**.
+   - Click **New repository secret** and add the following:
+
+   | Secret Name | Secret Value | Example |
+   | :--- | :--- | :--- |
+   | `PA_USERNAME` | Your PythonAnywhere username | `john_doe` |
+   | `PA_API_TOKEN` | The token string you copied from PythonAnywhere | `a1b2c3d4e5f6...` |
+   | `PA_DOMAIN` | *(Optional)* Your domain if using custom domain | `john_doe.pythonanywhere.com` |
+
+3. **That's it!**:
+   - From now on, whenever you run `git push origin main`, GitHub Actions will run tests and deploy your site automatically in under 60 seconds.
+   - You can watch the deployment in real time by clicking on the **Actions** tab in your GitHub repository!
+
+---
+
+## Routine Maintenance & Updating Code Manually
+
+If you ever prefer to update manually without GitHub Actions:
 
 1. Open your PythonAnywhere **Bash** console:
    ```bash

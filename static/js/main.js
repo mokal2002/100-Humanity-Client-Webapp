@@ -172,7 +172,35 @@ document.addEventListener("DOMContentLoaded", function () {
     }
   });
 
-  // 2. Multi-Image Upload Previews Before Submission
+  // 2. Touch Swipe Navigation for Lightbox on Mobile Devices
+  const lbModal = document.getElementById("lightbox-modal");
+  if (lbModal) {
+    let touchStartX = 0;
+    let touchStartY = 0;
+    lbModal.addEventListener("touchstart", function (e) {
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        touchStartX = e.changedTouches[0].clientX;
+        touchStartY = e.changedTouches[0].clientY;
+      }
+    }, { passive: true });
+
+    lbModal.addEventListener("touchend", function (e) {
+      if (e.changedTouches && e.changedTouches.length > 0) {
+        const deltaX = e.changedTouches[0].clientX - touchStartX;
+        const deltaY = e.changedTouches[0].clientY - touchStartY;
+        // Require horizontal swipe of at least 45px and not dominated by vertical scroll
+        if (Math.abs(deltaX) > 45 && Math.abs(deltaX) > Math.abs(deltaY) * 1.5) {
+          if (deltaX > 0) {
+            window.stepLightbox(-1); // swipe right -> previous
+          } else {
+            window.stepLightbox(1);  // swipe left -> next
+          }
+        }
+      }
+    }, { passive: true });
+  }
+
+  // 3. Multi-Image Upload Previews Before Submission
   const fileInput = document.querySelector('input[type="file"][multiple]');
   const previewContainer = document.getElementById("upload-preview-container");
   if (fileInput && previewContainer) {

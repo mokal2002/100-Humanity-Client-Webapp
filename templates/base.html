@@ -110,37 +110,37 @@
       </button>
     </div>
 
-    <div class="flex-1 flex items-center justify-center relative my-4 max-w-6xl w-full mx-auto overflow-hidden">
-      <button type="button" onclick="stepLightbox(-1)" class="p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition z-10 mr-2 sm:mr-4" aria-label="{% trans 'Previous photograph' %}">
+    <div class="flex-1 flex items-center justify-center relative my-2 sm:my-4 max-w-6xl w-full mx-auto overflow-hidden">
+      <button type="button" onclick="stepLightbox(-1)" class="absolute left-1 sm:left-4 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-900/60 hover:bg-slate-900/90 text-white transition z-20 border border-white/20" aria-label="{% trans 'Previous photograph' %}">
         ◀
       </button>
-      <div class="max-h-[72vh] flex flex-col items-center justify-center">
+      <div class="max-h-[72vh] w-full flex flex-col items-center justify-center px-10 sm:px-14">
         <img id="lightbox-image" src="" alt="{% trans 'Event photograph' %}" class="max-h-[65vh] max-w-full object-contain rounded-lg shadow-2xl border border-white/15" />
       </div>
-      <button type="button" onclick="stepLightbox(1)" class="p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition z-10 ml-2 sm:ml-4" aria-label="{% trans 'Next photograph' %}">
+      <button type="button" onclick="stepLightbox(1)" class="absolute right-1 sm:right-4 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-900/60 hover:bg-slate-900/90 text-white transition z-20 border border-white/20" aria-label="{% trans 'Next photograph' %}">
         ▶
       </button>
     </div>
 
-    <div class="max-w-3xl w-full mx-auto text-center text-white bg-white/5 border border-white/10 rounded-xl p-3.5">
+    <div class="max-w-3xl w-full mx-auto text-center text-white bg-white/5 border border-white/10 rounded-xl p-3 sm:p-3.5">
       <p id="lightbox-caption" class="text-sm sm:text-base font-medium text-slate-100"></p>
       <p id="lightbox-credit" class="text-xs text-amber-300/90 mt-1"></p>
     </div>
   </div>
 
   <!-- Global Generic / Principle Study Modal -->
-  <div id="generic-modal" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true">
+  <div id="generic-modal" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true">
     <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-[#E6DEC8] overflow-hidden">
-      <div class="px-6 py-4 bg-[#1B365D] text-white flex items-center justify-between">
-        <h3 id="generic-modal-title" class="text-lg font-bold font-heading text-white">{% trans "Details" %}</h3>
-        <button type="button" onclick="closeGenericModal()" class="text-white/80 hover:text-white px-2.5 py-1 rounded-lg bg-white/10 text-sm">✕ {% trans "Close" %}</button>
+      <div class="px-5 sm:px-6 py-4 bg-[#1B365D] text-white flex items-center justify-between">
+        <h3 id="generic-modal-title" class="text-base sm:text-lg font-bold font-heading text-white">{% trans "Details" %}</h3>
+        <button type="button" onclick="closeGenericModal()" class="text-white/80 hover:text-white px-2.5 py-1 rounded-lg bg-white/10 text-xs sm:text-sm">✕ {% trans "Close" %}</button>
       </div>
-      <div id="generic-modal-body" class="p-6 overflow-y-auto space-y-4 text-slate-700"></div>
+      <div id="generic-modal-body" class="p-4 sm:p-6 overflow-y-auto space-y-4 text-slate-700"></div>
     </div>
   </div>
 
   <!-- Toast Container -->
-  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 max-w-sm w-full pointer-events-none" aria-live="polite"></div>
+  <div id="toast-container" class="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-5 sm:right-5 z-50 space-y-2 max-w-sm w-auto sm:w-full pointer-events-none" aria-live="polite"></div>
 
   <script src="{% static 'js/main.js' %}"></script>
   {% block extra_js %}{% endblock %}

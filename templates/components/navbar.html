@@ -1,14 +1,14 @@
 {% load static i18n %}
 <!-- Top Announcement & Multilingual Bar -->
 <div class="bg-[#0F2544] text-amber-100/90 text-[11px] sm:text-xs border-b border-amber-500/20" role="region" aria-label="{% trans 'Top Announcement and Language Bar' %}">
-  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-1.5 sm:py-2 flex flex-wrap items-center justify-between gap-2">
-    <div class="flex items-center gap-2 min-w-0">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-1.5 sm:py-2 flex items-center justify-between gap-2">
+    <div class="flex items-center gap-2 min-w-0 flex-1">
       <span class="inline-block w-2 h-2 rounded-full bg-amber-400 flex-shrink-0"></span>
-      <span class="font-medium tracking-wide truncate sm:whitespace-normal">
+      <span class="font-medium tracking-wide truncate max-w-[160px] xs:max-w-[240px] sm:max-w-none">
         {% trans "Spreading Buddha Dhamma • Equality • Compassion • Scientific Inquiry" %}
       </span>
     </div>
-    <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+    <div class="flex items-center gap-2 sm:gap-4 flex-shrink-0">
       <a href="mailto:{{ site_settings.contact_email }}" class="hover:text-white transition hidden md:inline">{{ site_settings.contact_email }}</a>
       <a href="tel:{{ site_settings.contact_phone }}" class="hover:text-white transition hidden sm:inline">{{ site_settings.contact_phone }}</a>
       
@@ -113,16 +113,16 @@
     </div>
 
     <!-- Mobile Nav Links with Active Highlighting -->
-    <a href="{% url 'core:home' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.url_name == 'home' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Home" %}</a>
-    <a href="{% url 'core:about' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.url_name == 'about' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "About Us" %}</a>
-    <a href="{% url 'education:principle_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'education' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Buddha Dhamma Education (15 Principles)" %}</a>
-    <a href="{% url 'events:event_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'events' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Events & Activities" %}</a>
-    <a href="{% url 'gallery:album_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'gallery' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Event Photo Gallery" %}</a>
-    <a href="{% url 'videos:video_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'videos' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "YouTube Videos" %}</a>
-    <a href="{% url 'articles:article_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'articles' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Articles & Dhamma Resources" %}</a>
+    <a href="{% url 'core:home' %}" onclick="toggleMobileNav(false)" class="block w-full text-left px-4 py-3 rounded-xl text-sm transition {% if request.resolver_match.url_name == 'home' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Home" %}</a>
+    <a href="{% url 'core:about' %}" onclick="toggleMobileNav(false)" class="block w-full text-left px-4 py-3 rounded-xl text-sm transition {% if request.resolver_match.url_name == 'about' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "About Us" %}</a>
+    <a href="{% url 'education:principle_list' %}" onclick="toggleMobileNav(false)" class="block w-full text-left px-4 py-3 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'education' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Buddha Dhamma Education (15 Principles)" %}</a>
+    <a href="{% url 'events:event_list' %}" onclick="toggleMobileNav(false)" class="block w-full text-left px-4 py-3 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'events' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Events & Activities" %}</a>
+    <a href="{% url 'gallery:album_list' %}" onclick="toggleMobileNav(false)" class="block w-full text-left px-4 py-3 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'gallery' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Event Photo Gallery" %}</a>
+    <a href="{% url 'videos:video_list' %}" onclick="toggleMobileNav(false)" class="block w-full text-left px-4 py-3 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'videos' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "YouTube Videos" %}</a>
+    <a href="{% url 'articles:article_list' %}" onclick="toggleMobileNav(false)" class="block w-full text-left px-4 py-3 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'articles' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Articles & Dhamma Resources" %}</a>
     
     <div class="pt-2">
-      <a href="{% url 'contact:contact' %}" class="block w-full text-center px-4 py-3 rounded-xl text-sm font-bold bg-[#1B365D] text-white hover:bg-[#0F2544] transition shadow-md">{% trans "Contact Us" %}</a>
+      <a href="{% url 'contact:contact' %}" onclick="toggleMobileNav(false)" class="block w-full text-center px-4 py-3.5 rounded-xl text-sm font-bold bg-[#1B365D] text-white hover:bg-[#0F2544] transition shadow-md">{% trans "Contact Us" %}</a>
     </div>
   </div>
 </header>

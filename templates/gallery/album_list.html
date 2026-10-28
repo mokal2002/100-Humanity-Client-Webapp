@@ -19,12 +19,12 @@
   </div>
 
   {% if categories %}
-    <div class="bg-white rounded-2xl p-4 border border-[#E6DEC8] shadow-sm flex flex-wrap gap-2" role="navigation" aria-label="{% trans 'Album Categories' %}">
-      <a href="{% url 'gallery:album_list' %}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if not selected_category %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
+    <div class="bg-white rounded-2xl p-3 sm:p-4 border border-[#E6DEC8] shadow-sm flex items-center gap-2 overflow-x-auto no-scrollbar flex-nowrap sm:flex-wrap pb-2" role="navigation" aria-label="{% trans 'Album Categories' %}">
+      <a href="{% url 'gallery:album_list' %}" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if not selected_category %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
         {% trans "All Categories" %}
       </a>
       {% for cat in categories %}
-        <a href="{% url 'gallery:album_list' %}?category={{ cat|urlencode }}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if selected_category == cat %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
+        <a href="{% url 'gallery:album_list' %}?category={{ cat|urlencode }}" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if selected_category == cat %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
           {{ cat }}
         </a>
       {% endfor %}

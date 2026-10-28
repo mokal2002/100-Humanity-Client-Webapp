@@ -234,3 +234,212 @@ class SiteSettings(models.Model):
                 youtube_channel_name=getattr(settings, "DEFAULT_YOUTUBE_CHANNEL_NAME", "100% HUMANITY"),
                 youtube_channel_url=getattr(settings, "DEFAULT_YOUTUBE_CHANNEL_URL", ""),
             )
+
+
+class EnvironmentSetting(models.Model):
+    """
+    Singleton model for managing system environment variables, API keys,
+    and database connection strings directly from Django Admin without backend shell access.
+    Automatically synchronizes with runtime settings and the .env file.
+    """
+    database_url = models.CharField(
+        _("Database Connection URL (DATABASE_URL)"),
+        max_length=500,
+        blank=True,
+        default="",
+        help_text=_(
+            "PostgreSQL connection URL (e.g. Neon, Supabase, Railway). "
+            "Leave blank to use local SQLite (db.sqlite3)."
+        ),
+    )
+
+    # Cloudinary Image Storage
+    cloudinary_cloud_name = models.CharField(
+        _("Cloudinary Cloud Name"),
+        max_length=120,
+        blank=True,
+        default="",
+        help_text=_("From your Cloudinary dashboard: https://console.cloudinary.com/"),
+    )
+    cloudinary_api_key = models.CharField(
+        _("Cloudinary API Key"),
+        max_length=120,
+        blank=True,
+        default="",
+    )
+    cloudinary_api_secret = models.CharField(
+        _("Cloudinary API Secret"),
+        max_length=150,
+        blank=True,
+        default="",
+    )
+    cloudinary_folder = models.CharField(
+        _("Cloudinary Upload Folder"),
+        max_length=100,
+        default="100_humanity",
+        help_text=_("Folder name in Cloudinary where photos will be organized."),
+    )
+
+    # YouTube API / Integration
+    youtube_api_key = models.CharField(
+        _("YouTube API Key (Optional)"),
+        max_length=150,
+        blank=True,
+        default="",
+        help_text=_("Google Cloud YouTube Data API v3 key if automated playlist fetching is needed."),
+    )
+
+    # Django Core Security & Hosts
+    secret_key = models.CharField(
+        _("Django Secret Key (SECRET_KEY)"),
+        max_length=255,
+        blank=True,
+        default="",
+        help_text=_("Cryptographic signing key. Leave blank to preserve current key."),
+    )
+    allowed_hosts = models.CharField(
+        _("Allowed Hosts (ALLOWED_HOSTS)"),
+        max_length=500,
+        default="127.0.0.1,localhost,testserver,.onrender.com,.vercel.app,.pythonanywhere.com",
+        help_text=_("Comma-separated domains permitted to connect to this server."),
+    )
+    csrf_trusted_origins = models.CharField(
+        _("CSRF Trusted Origins (CSRF_TRUSTED_ORIGINS)"),
+        max_length=500,
+        blank=True,
+        default="",
+        help_text=_("Comma-separated HTTPS origins (e.g. https://100humanity.org,https://my-app.onrender.com)."),
+    )
+
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Environment & API Setting (.env)")
+        verbose_name_plural = _("Environment & API Settings (.env)")
+
+    def __str__(self):
+        return "System Environment & API Configuration"
+
+    @property
+    def active_database_engine(self):
+        """Displays currently active database engine and host safely."""
+        from django.db import connection
+        engine = connection.settings_dict.get("ENGINE", "").split(".")[-1]
+        name = connection.settings_dict.get("NAME", "")
+        return f"{engine.upper()} ({name})"
+
+    @property
+    def cloudinary_status(self):
+        """Displays whether Cloudinary credentials are fully configured."""
+        if self.cloudinary_cloud_name and self.cloudinary_api_key and self.cloudinary_api_secret:
+            return f"Active (Cloud: {self.cloudinary_cloud_name}, Folder: {self.cloudinary_folder})"
+        return "Not Configured (Missing Cloud Name, Key, or Secret)"
+
+    def clean(self):
+        if EnvironmentSetting.objects.exclude(pk=self.pk).exists():
+            raise ValidationError(_("Only one EnvironmentSetting instance is permitted."))
+
+    def save(self, *args, **kwargs):
+        self.pk = 1
+        super().save(*args, **kwargs)
+        self.sync_to_runtime_and_env()
+
+    def sync_to_runtime_and_env(self):
+        """Updates in-memory Django settings and writes changes to the local .env file."""
+        from django.conf import settings
+        from pathlib import Path
+
+        # 1. In-memory settings synchronization
+        if self.cloudinary_cloud_name:
+            settings.CLOUDINARY_CLOUD_NAME = self.cloudinary_cloud_name
+        if self.cloudinary_api_key:
+            settings.CLOUDINARY_API_KEY = self.cloudinary_api_key
+        if self.cloudinary_api_secret:
+            settings.CLOUDINARY_API_SECRET = self.cloudinary_api_secret
+        if self.cloudinary_folder:
+            settings.CLOUDINARY_FOLDER = self.cloudinary_folder
+
+        if self.cloudinary_cloud_name and self.cloudinary_api_key and self.cloudinary_api_secret:
+            try:
+                import cloudinary
+                cloudinary.config(
+                    cloud_name=self.cloudinary_cloud_name,
+                    api_key=self.cloudinary_api_key,
+                    api_secret=self.cloudinary_api_secret,
+                    secure=True,
+                )
+            except Exception:
+                pass
+
+        if self.allowed_hosts:
+            settings.ALLOWED_HOSTS = [h.strip() for h in self.allowed_hosts.split(",") if h.strip()]
+
+        if self.csrf_trusted_origins:
+            settings.CSRF_TRUSTED_ORIGINS = [u.strip() for u in self.csrf_trusted_origins.split(",") if u.strip()]
+
+        # 2. Write to .env file
+        env_path = Path(settings.BASE_DIR) / ".env"
+        try:
+            existing = {}
+            if env_path.exists():
+                with open(env_path, "r", encoding="utf-8") as f:
+                    for line in f:
+                        line = line.strip()
+                        if line and not line.startswith("#") and "=" in line:
+                            parts = line.split("=", 1)
+                            existing[parts[0].strip()] = parts[1].strip()
+
+            if self.database_url:
+                existing["DATABASE_URL"] = self.database_url
+            if self.cloudinary_cloud_name:
+                existing["CLOUDINARY_CLOUD_NAME"] = self.cloudinary_cloud_name
+            if self.cloudinary_api_key:
+                existing["CLOUDINARY_API_KEY"] = self.cloudinary_api_key
+            if self.cloudinary_api_secret:
+                existing["CLOUDINARY_API_SECRET"] = self.cloudinary_api_secret
+            if self.cloudinary_folder:
+                existing["CLOUDINARY_FOLDER"] = self.cloudinary_folder
+            if self.youtube_api_key:
+                existing["YOUTUBE_API_KEY"] = self.youtube_api_key
+            if self.allowed_hosts:
+                existing["ALLOWED_HOSTS"] = self.allowed_hosts
+            if self.csrf_trusted_origins:
+                existing["CSRF_TRUSTED_ORIGINS"] = self.csrf_trusted_origins
+            if self.secret_key:
+                existing["SECRET_KEY"] = self.secret_key
+
+            with open(env_path, "w", encoding="utf-8") as f:
+                f.write("# Generated and updated via Django Admin (Environment & API Settings)\n")
+                for k, v in existing.items():
+                    f.write(f"{k}={v}\n")
+        except Exception:
+            pass
+
+    @classmethod
+    def get_solo(cls):
+        """Returns the active EnvironmentSetting record or initializes from existing env/settings."""
+        from django.conf import settings
+        import os
+        try:
+            raw_hosts = getattr(settings, "ALLOWED_HOSTS", [])
+            allowed_hosts_str = ",".join(raw_hosts) if isinstance(raw_hosts, list) else str(raw_hosts)
+            raw_csrf = getattr(settings, "CSRF_TRUSTED_ORIGINS", [])
+            csrf_str = ",".join(raw_csrf) if isinstance(raw_csrf, list) else str(raw_csrf)
+
+            obj, _ = cls.objects.get_or_create(
+                pk=1,
+                defaults={
+                    "database_url": os.environ.get("DATABASE_URL", ""),
+                    "cloudinary_cloud_name": getattr(settings, "CLOUDINARY_CLOUD_NAME", ""),
+                    "cloudinary_api_key": getattr(settings, "CLOUDINARY_API_KEY", ""),
+                    "cloudinary_api_secret": getattr(settings, "CLOUDINARY_API_SECRET", ""),
+                    "cloudinary_folder": getattr(settings, "CLOUDINARY_FOLDER", "100_humanity"),
+                    "youtube_api_key": os.environ.get("YOUTUBE_API_KEY", ""),
+                    "secret_key": getattr(settings, "SECRET_KEY", ""),
+                    "allowed_hosts": allowed_hosts_str or "127.0.0.1,localhost,testserver,.onrender.com,.vercel.app,.pythonanywhere.com",
+                    "csrf_trusted_origins": csrf_str,
+                },
+            )
+            return obj
+        except Exception:
+            return cls(pk=1)

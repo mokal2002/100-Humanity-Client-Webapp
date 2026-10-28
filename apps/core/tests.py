@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
-from apps.core.models import SiteSettings
+from apps.core.models import SiteSettings, EnvironmentSetting
 from apps.events.models import Event
 
 
@@ -66,3 +66,25 @@ class CoreViewsAndSettingsTests(TestCase):
         self.assertTrue(settings.SECURE_CONTENT_TYPE_NOSNIFF)
         self.assertEqual(settings.X_FRAME_OPTIONS, "DENY")
         self.assertTrue(settings.SESSION_COOKIE_HTTPONLY)
+
+    def test_environment_settings_singleton_and_sync(self):
+        env_obj = EnvironmentSetting.get_solo()
+        self.assertEqual(env_obj.pk, 1)
+        self.assertTrue(env_obj.active_database_engine)
+        self.assertTrue(env_obj.cloudinary_status)
+
+        # Test in-memory synchronization
+        env_obj.cloudinary_cloud_name = "test-cloud-123"
+        env_obj.cloudinary_api_key = "test-key-456"
+        env_obj.cloudinary_api_secret = "test-secret-789"
+        env_obj.save()
+
+        self.assertEqual(settings.CLOUDINARY_CLOUD_NAME, "test-cloud-123")
+        self.assertEqual(settings.CLOUDINARY_API_KEY, "test-key-456")
+        self.assertEqual(settings.CLOUDINARY_API_SECRET, "test-secret-789")
+        self.assertIn("Active", env_obj.cloudinary_status)
+
+        # Duplicate clean check
+        second = EnvironmentSetting(database_url="postgresql://fake")
+        with self.assertRaises(ValidationError):
+            second.clean()

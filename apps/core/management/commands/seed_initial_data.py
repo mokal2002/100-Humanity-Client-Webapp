@@ -8,7 +8,7 @@ from datetime import timedelta
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from apps.core.models import SiteSettings
+from apps.core.models import SiteSettings, EnvironmentSetting
 from apps.education.models import DhammaPrinciple, DEFAULT_DHAMMA_PRINCIPLES
 from apps.events.models import Event
 from apps.gallery.models import GalleryAlbum, GalleryImage
@@ -22,9 +22,11 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         today = timezone.localdate()
 
-        # 1. SiteSettings
+        # 1. SiteSettings & EnvironmentSetting
         site_settings = SiteSettings.get_solo()
+        env_settings = EnvironmentSetting.get_solo()
         self.stdout.write(self.style.SUCCESS(f"Verified SiteSettings for '{site_settings.site_name}'."))
+        self.stdout.write(self.style.SUCCESS("Verified Environment & API settings."))
 
         # 2. Dhamma Principles
         created_count = 0

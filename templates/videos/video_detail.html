@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{{ video.title }} — {% trans "YouTube Videos" %} — {{ site_settings.site_name }}{% endblock %}
+{% block meta_description %}{{ video.description|truncatewords:28 }}{% endblock %}
+
+{% block content %}
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
+  <div>
+    <a href="{% url 'videos:video_list' %}" class="text-xs font-bold text-[#1B365D] hover:text-[#C87D20]">
+      &larr; {% trans "Back to Video Library" %}
+    </a>
+  </div>
+
+  <article class="bg-white rounded-3xl overflow-hidden border border-[#E6DEC8] shadow-sm">
+    <!-- Privacy-Enhanced YouTube Embed -->
+    <div class="aspect-video w-full bg-slate-900 relative">
+      <iframe
+        class="w-full h-full"
+        src="{{ video.embed_url }}"
+        title="{{ video.title }}"
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen>
+      </iframe>
+    </div>
+
+    <div class="p-8 sm:p-10 space-y-6">
+      <div>
+        {% if video.category %}
+          <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-[#1B365D] mb-2 inline-block">{{ video.category.name }}</span>
+        {% endif %}
+        <h1 class="text-2xl sm:text-3xl font-bold text-[#1B365D] font-heading">{{ video.title }}</h1>
+      </div>
+
+      <div class="space-y-3">
+        <h2 class="text-lg font-bold text-[#1B365D] font-heading">{% trans "About This Talk" %}</h2>
+        <div class="prose max-w-none text-slate-700 leading-relaxed text-sm sm:text-base">
+          {{ video.description|linebreaks }}
+        </div>
+        <div class="pt-3">
+          <a href="{{ video.youtube_url }}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-red-700 hover:bg-red-600 text-white text-xs font-bold shadow-sm inline-flex items-center gap-2">
+            <span>▶</span><span>{% trans "Watch Directly on YouTube" %} &nearr;</span>
+          </a>
+        </div>
+      </div>
+    </div>
+  </article>
+
+  {% if related_videos %}
+    <div class="space-y-4 pt-6">
+      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "More Videos from 100% HUMANITY" %}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for rel in related_videos %}
+          <article class="bg-white rounded-2xl overflow-hidden border border-[#E6DEC8] shadow-sm flex flex-col justify-between">
+            <div>
+              <div class="aspect-video bg-slate-900 relative">
+                <a href="{{ rel.get_absolute_url }}">
+                  <img src="{{ rel.effective_thumbnail_url }}" alt="{{ rel.title }}" loading="lazy" class="w-full h-full object-cover" />
+                </a>
+              </div>
+              <div class="p-4">
+                <h3 class="text-sm font-bold text-[#1B365D] font-heading mb-1">
+                  <a href="{{ rel.get_absolute_url }}" class="hover:text-[#C87D20]">{{ rel.title }}</a>
+                </h3>
+              </div>
+            </div>
+            <div class="p-4 pt-0">
+              <a href="{{ rel.get_absolute_url }}" class="text-xs font-bold text-[#1B365D] hover:underline">{% trans "Watch" %} &rarr;</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

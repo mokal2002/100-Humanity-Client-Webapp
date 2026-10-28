@@ -1,0 +1,19 @@
+{% if messages %}
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-2" role="status" aria-live="polite">
+    {% for message in messages %}
+      <div data-django-message="{{ message }}" data-django-tag="{{ message.tags|default:'info' }}" class="px-4 py-3 rounded-xl text-sm font-medium flex items-center justify-between gap-3 shadow-sm border-l-4
+        {% if message.tags == 'success' %}
+          bg-emerald-50 border-emerald-500 text-emerald-950
+        {% elif message.tags == 'warning' %}
+          bg-amber-50 border-amber-500 text-amber-950
+        {% elif message.tags == 'error' %}
+          bg-red-50 border-red-500 text-red-950
+        {% else %}
+          bg-[#FAF7F0] border-[#1B365D] text-[#1B365D]
+        {% endif %}">
+        <span>{{ message }}</span>
+        <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold px-2 py-1 opacity-70 hover:opacity-100" aria-label="Dismiss message">✕</button>
+      </div>
+    {% endfor %}
+  </div>
+{% endif %}

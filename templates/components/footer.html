@@ -1,0 +1,85 @@
+{% load i18n static %}
+<!-- Global 4-Column Footer -->
+<footer class="bg-[#0F2544] text-slate-200 border-t-4 border-[#D49B38] mt-16" role="contentinfo">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+      <!-- Col 1: Brand & Mission -->
+      <div class="space-y-3">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center border-2 border-[#D49B38] bg-white flex-shrink-0">
+            <img src="{% static 'images/logo.svg' %}" alt="{{ site_settings.site_name }}" class="w-full h-full object-contain" />
+          </div>
+          <span class="text-lg font-bold tracking-tight text-white">{{ site_settings.site_name }}</span>
+        </div>
+        <p class="text-sm text-slate-300 leading-relaxed">
+          {{ site_settings.tagline|default:_("Spreading Buddha Dhamma and promoting humanity, equality, compassion, scientific thinking, meditation, and social awareness.") }}
+        </p>
+        <p class="text-xs text-amber-300/90 font-medium">
+          {% trans "Founder &amp; Organizer:" %} {{ site_settings.contact_person }}
+        </p>
+      </div>
+
+      <!-- Col 2: Quick Navigation -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-[#D49B38] mb-3">{% trans "Platform Sections" %}</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="{% url 'core:about' %}" class="hover:text-white transition">{% trans "About 100% HUMANITY" %}</a></li>
+          <li><a href="{% url 'education:principle_list' %}" class="hover:text-white transition">{% trans "15 Principles for Dhamma Teachers" %}</a></li>
+          <li><a href="{% url 'events:event_list' %}" class="hover:text-white transition">{% trans "Community Events &amp; Seminars" %}</a></li>
+          <li><a href="{% url 'gallery:album_list' %}" class="hover:text-white transition">{% trans "Event Photo Albums" %}</a></li>
+          <li><a href="{% url 'videos:video_list' %}" class="hover:text-white transition">{% trans "100% HUMANITY YouTube Videos" %}</a></li>
+          <li><a href="{% url 'articles:article_list' %}" class="hover:text-white transition">{% trans "Dhamma Articles &amp; Marathi/Hindi Study" %}</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 3: Ethics, Legal & Community Standards -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-[#D49B38] mb-3">{% trans "Ethics &amp; Governance" %}</h3>
+        <ul class="space-y-2 text-sm">
+          <li><a href="{% url 'core:about' %}#privacy" class="hover:text-white transition">{% trans "Privacy Policy &amp; Photo Consent" %}</a></li>
+          <li><a href="{% url 'core:about' %}#terms" class="hover:text-white transition">{% trans "Terms of Use &amp; Non-Certification Notice" %}</a></li>
+          <li><a href="{% url 'contact:contact' %}?type=report" class="hover:text-white transition text-amber-200">{% trans "Report Incorrect Content / Photo Removal" %}</a></li>
+          <li><a href="{% url 'admin:index' %}" class="hover:text-white transition">{% trans "Administrator Dashboard (/admin)" %}</a></li>
+          <li><a href="{% url 'django.contrib.sitemaps.views.sitemap' %}" class="hover:text-white transition">{% trans "XML Sitemap" %}</a></li>
+        </ul>
+      </div>
+
+      <!-- Col 4: Direct Contact Details -->
+      <div>
+        <h3 class="text-sm font-semibold uppercase tracking-wider text-[#D49B38] mb-3">{% trans "Contact Information" %}</h3>
+        <ul class="space-y-2.5 text-sm text-slate-300">
+          <li class="flex items-start gap-2">
+            <span class="text-[#D49B38] font-bold">{% trans "Person:" %}</span>
+            <span>{{ site_settings.contact_person }} ({% trans "Buddha Dhamma Educator &amp; Community Organizer" %})</span>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[#D49B38] font-bold">{% trans "Email:" %}</span>
+            <a href="mailto:{{ site_settings.contact_email }}" class="hover:text-white underline">{{ site_settings.contact_email }}</a>
+          </li>
+          <li class="flex items-center gap-2">
+            <span class="text-[#D49B38] font-bold">{% trans "Phone:" %}</span>
+            <a href="tel:{{ site_settings.contact_phone }}" class="hover:text-white">{{ site_settings.contact_phone }}</a>
+          </li>
+          <li class="pt-1">
+            {% if site_settings.youtube_channel_url %}
+              <a href="{{ site_settings.youtube_channel_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-red-700/90 hover:bg-red-600 text-white text-xs font-semibold transition shadow-sm">
+                <span>▶</span>
+                <span>{{ site_settings.youtube_channel_name }}</span>
+              </a>
+            {% else %}
+              <a href="{% url 'videos:video_list' %}" class="inline-flex items-center gap-2 px-3.5 py-2 rounded-lg bg-red-700/90 hover:bg-red-600 text-white text-xs font-semibold transition shadow-sm">
+                <span>▶</span>
+                <span>{% trans "YouTube: 100% HUMANITY" %}</span>
+              </a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="border-t border-slate-700/80 mt-10 pt-6 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-400 gap-4">
+      <p>&copy; {% now "Y" %} {{ site_settings.site_name }} • {% trans "Guided by Compassionate Inquiry, Equality, and Human Dignity." %}</p>
+      <p>{{ site_settings.footer_note }}</p>
+    </div>
+  </div>
+</footer>

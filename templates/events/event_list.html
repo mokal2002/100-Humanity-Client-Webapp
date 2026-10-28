@@ -1,0 +1,73 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Events & Study Gatherings" %} — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+  <div>
+    <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{% trans "Community Calendar" %}</span>
+    <h1 class="text-3xl font-bold text-[#1B365D] font-heading mt-1">{% trans "Dhamma Events, Lectures &amp; Study Circles" %}</h1>
+    <p class="text-sm text-slate-600 mt-1">{% trans "All 100% HUMANITY educational sessions are free and open to everyone. Filter by upcoming or past programs below." %}</p>
+  </div>
+
+  <!-- Filter & Search Bar -->
+  <form method="get" class="bg-white rounded-2xl p-5 border border-[#E6DEC8] shadow-sm flex flex-col md:flex-row gap-4 items-center justify-between" role="search" aria-label="{% trans 'Filter Events' %}">
+    <div class="flex items-center gap-2 flex-wrap">
+      <a href="{% url 'events:event_list' %}?period=all{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if period_filter == 'all' %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">{% trans "All Events" %}</a>
+      <a href="{% url 'events:event_list' %}?period=upcoming{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if period_filter == 'upcoming' %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">{% trans "Upcoming Events" %}</a>
+      <a href="{% url 'events:event_list' %}?period=past{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if period_filter == 'past' %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">{% trans "Past Events" %}</a>
+    </div>
+
+    <div class="w-full md:w-80 flex gap-2">
+      <label for="event-search" class="sr-only">{% trans "Search events" %}</label>
+      <input id="event-search" type="search" name="q" value="{{ search_query }}" class="w-full px-3.5 py-2 rounded-xl border border-[#E6DEC8] text-sm focus:outline-none focus:border-[#1B365D]" placeholder="{% trans 'Search title, venue, or topic...' %}" />
+      <input type="hidden" name="period" value="{{ period_filter }}" />
+      <button type="submit" class="px-4 py-2 rounded-xl bg-[#1B365D] hover:bg-[#0F2544] text-white text-xs font-bold whitespace-nowrap">{% trans "Search" %}</button>
+    </div>
+  </form>
+
+  {% if page_obj and page_obj.object_list %}
+    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      {% for event in page_obj %}
+        <article class="bg-white rounded-2xl overflow-hidden border border-[#E6DEC8] shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <div>
+            <div class="relative h-48 bg-slate-200">
+              {% if event.cover_image_url %}
+                <img src="{{ event.cover_image_url }}" alt="{{ event.title }}" loading="lazy" class="w-full h-full object-cover" />
+              {% else %}
+                <div class="w-full h-full bg-[#1B365D] flex items-center justify-center text-[#D49B38] text-4xl font-bold">☸</div>
+              {% endif %}
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md text-xs font-semibold {% if event.is_upcoming %}bg-emerald-700 text-white{% else %}bg-slate-800/90 text-slate-100{% endif %}">
+                {% if event.is_upcoming %}{% trans "Upcoming" %}{% else %}{% trans "Past Event" %}{% endif %}
+              </span>
+            </div>
+            <div class="p-6">
+              <div class="text-xs font-semibold text-[#C87D20] mb-1">
+                {{ event.start_date|date:"M j, Y" }}{% if event.start_time %} • {{ event.start_time|time:"g:i A" }}{% endif %}
+              </div>
+              <h2 class="text-lg font-bold text-[#1B365D] font-heading mb-1.5">
+                <a href="{{ event.get_absolute_url }}" class="hover:text-[#C87D20]">{{ event.title }}</a>
+              </h2>
+              <p class="text-xs text-slate-500 mb-2 font-medium">📍 {{ event.venue }}</p>
+              <p class="text-sm text-slate-600 line-clamp-3 leading-relaxed">{{ event.description|truncatewords:24 }}</p>
+            </div>
+          </div>
+          <div class="p-6 pt-0">
+            <a href="{{ event.get_absolute_url }}" class="w-full block text-center px-4 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8] text-xs font-bold text-[#1B365D] hover:bg-amber-50 transition">
+              {% trans "View Event Details" %} &rarr;
+            </a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+
+    {% include "components/pagination.html" %}
+  {% else %}
+    <div class="bg-white rounded-2xl p-10 text-center border border-[#E6DEC8] text-slate-600">
+      <h2 class="text-lg font-bold text-[#1B365D]">{% trans "No Events Found" %}</h2>
+      <p class="text-sm mt-1">{% trans "There are no events matching your selected filter or search term." %}</p>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

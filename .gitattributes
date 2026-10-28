@@ -1,0 +1,4 @@
+# Ensure shell scripts and build files always keep Unix line endings
+*.sh text eol=lf
+runtime.txt text eol=lf
+Procfile text eol=lf

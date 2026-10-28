@@ -1,0 +1,148 @@
+{% load static i18n %}<!DOCTYPE html>
+<html lang="{{ LANGUAGE_CODE|default:'en' }}" class="scroll-smooth">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}{{ site_settings.site_name }} — Buddha Dhamma, Equality, Compassion &amp; Rational Inquiry{% endblock %}</title>
+  <meta name="description" content="{% block meta_description %}{{ site_settings.meta_description }}{% endblock %}" />
+  <link rel="canonical" href="{{ request.build_absolute_uri }}" />
+
+  <!-- Open Graph Metadata -->
+  <meta property="og:site_name" content="{{ site_settings.site_name }}" />
+  <meta property="og:title" content="{% block og_title %}{{ site_settings.site_name }} — Buddha Dhamma &amp; Human Equality{% endblock %}" />
+  <meta property="og:description" content="{% block og_description %}{{ site_settings.meta_description }}{% endblock %}" />
+  <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
+  <meta property="og:url" content="{{ request.build_absolute_uri }}" />
+
+  <!-- Google Fonts: Inter, Merriweather & Noto Sans Devanagari for Marathi and Hindi -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+
+  <!-- Tailwind CSS CDN with Custom Palette Configuration -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            dhamma: {
+              navy: '#1B365D',
+              darknavy: '#0F2544',
+              gold: '#D49B38',
+              saffron: '#C87D20',
+              ivory: '#FAF7F0',
+              sand: '#F3EDE0',
+              border: '#E6DEC8'
+            }
+          },
+          fontFamily: {
+            sans: ['Inter', 'Noto Sans Devanagari', 'system-ui', '-apple-system', 'sans-serif'],
+            heading: ['Merriweather', 'Noto Sans Devanagari', 'Georgia', 'serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <!-- Favicon & Stylesheet -->
+  <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}" />
+  <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+
+  <style>
+    body {
+      font-family: 'Inter', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+      background-color: #FAF7F0;
+      color: #1E293B;
+      overflow-x: hidden;
+    }
+    .font-heading {
+      font-family: 'Merriweather', 'Noto Sans Devanagari', Georgia, serif;
+    }
+    :focus-visible {
+      outline: 3px solid #C87D20;
+      outline-offset: 2px;
+    }
+    .dharma-pattern {
+      background-image: radial-gradient(rgba(212, 155, 56, 0.14) 1px, transparent 1px);
+      background-size: 24px 24px;
+    }
+    @media (prefers-reduced-motion: reduce) {
+      *, ::before, ::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+        scroll-behavior: auto !important;
+      }
+    }
+  </style>
+
+  {% block extra_head %}{% endblock %}
+</head>
+<body class="min-h-screen flex flex-col bg-[#FAF7F0] text-slate-800 antialiased selection:bg-[#1B365D] selection:text-white">
+
+  <!-- Skip to Main Content Accessibility Link -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-[#1B365D] focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg">
+    {% trans "Skip to main content" %}
+  </a>
+
+  <!-- Top Announcement & Navbar -->
+  {% include "components/navbar.html" %}
+
+  <!-- Main Content Container -->
+  <main id="main-content" class="flex-1" tabindex="-1">
+    {% include "components/messages.html" %}
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- Global Footer -->
+  {% include "components/footer.html" %}
+
+  <!-- Global Photo Lightbox Modal (Accessible Keyboard & Click Navigation) -->
+  <div id="lightbox-modal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex flex-col justify-between p-4 sm:p-6" role="dialog" aria-modal="true" aria-label="{% trans 'Photograph Lightbox' %}">
+    <div class="flex items-center justify-between text-white max-w-6xl w-full mx-auto">
+      <div>
+        <span id="lightbox-album-title" class="text-sm font-semibold text-amber-300 block"></span>
+        <span id="lightbox-counter" class="text-xs text-slate-400"></span>
+      </div>
+      <button type="button" onclick="closeLightbox()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition" aria-label="{% trans 'Close lightbox' %}">
+        ✕ {% trans "Close (Esc)" %}
+      </button>
+    </div>
+
+    <div class="flex-1 flex items-center justify-center relative my-4 max-w-6xl w-full mx-auto overflow-hidden">
+      <button type="button" onclick="stepLightbox(-1)" class="p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition z-10 mr-2 sm:mr-4" aria-label="{% trans 'Previous photograph' %}">
+        ◀
+      </button>
+      <div class="max-h-[72vh] flex flex-col items-center justify-center">
+        <img id="lightbox-image" src="" alt="{% trans 'Event photograph' %}" class="max-h-[65vh] max-w-full object-contain rounded-lg shadow-2xl border border-white/15" />
+      </div>
+      <button type="button" onclick="stepLightbox(1)" class="p-3 rounded-full bg-white/10 hover:bg-white/25 text-white transition z-10 ml-2 sm:ml-4" aria-label="{% trans 'Next photograph' %}">
+        ▶
+      </button>
+    </div>
+
+    <div class="max-w-3xl w-full mx-auto text-center text-white bg-white/5 border border-white/10 rounded-xl p-3.5">
+      <p id="lightbox-caption" class="text-sm sm:text-base font-medium text-slate-100"></p>
+      <p id="lightbox-credit" class="text-xs text-amber-300/90 mt-1"></p>
+    </div>
+  </div>
+
+  <!-- Global Generic / Principle Study Modal -->
+  <div id="generic-modal" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-4 overflow-y-auto" role="dialog" aria-modal="true">
+    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-[#E6DEC8] overflow-hidden">
+      <div class="px-6 py-4 bg-[#1B365D] text-white flex items-center justify-between">
+        <h3 id="generic-modal-title" class="text-lg font-bold font-heading text-white">{% trans "Details" %}</h3>
+        <button type="button" onclick="closeGenericModal()" class="text-white/80 hover:text-white px-2.5 py-1 rounded-lg bg-white/10 text-sm">✕ {% trans "Close" %}</button>
+      </div>
+      <div id="generic-modal-body" class="p-6 overflow-y-auto space-y-4 text-slate-700"></div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 max-w-sm w-full pointer-events-none" aria-live="polite"></div>
+
+  <script src="{% static 'js/main.js' %}"></script>
+  {% block extra_js %}{% endblock %}
+</body>
+</html>

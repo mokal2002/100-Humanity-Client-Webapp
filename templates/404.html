@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Page Not Found (404)" %} — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-xl mx-auto px-4 py-20 text-center">
+  <div class="bg-white rounded-3xl p-8 sm:p-10 border border-[#E6DEC8] shadow-sm space-y-5">
+    <div class="w-14 h-14 rounded-full bg-amber-100 text-[#C87D20] font-bold text-xl flex items-center justify-center mx-auto">404</div>
+    <h1 class="text-2xl sm:text-3xl font-bold text-[#1B365D] font-heading">{% trans "Page Not Found" %}</h1>
+    <p class="text-sm text-slate-600 leading-relaxed">
+      {% trans "The page you are looking for may have been moved, renamed, or unpublished." %}
+    </p>
+    <div class="pt-2 flex justify-center gap-3 flex-wrap">
+      <a href="{% url 'core:home' %}" class="px-5 py-2.5 rounded-xl bg-[#1B365D] hover:bg-[#0F2544] text-white text-xs font-bold transition">
+        {% trans "Return to Homepage" %}
+      </a>
+      <a href="{% url 'education:principle_list' %}" class="px-5 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8] text-[#1B365D] text-xs font-semibold hover:bg-amber-50 transition">
+        {% trans "15 Dhamma Principles" %}
+      </a>
+    </div>
+  </div>
+</div>
+{% endblock %}

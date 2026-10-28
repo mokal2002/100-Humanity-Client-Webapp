@@ -1,0 +1,305 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: 100-humanity 1.0\n"
+"Language: hi\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+msgid "Home"
+msgstr "मुख्य पृष्ठ"
+
+msgid "About Us"
+msgstr "हमारे बारे में"
+
+msgid "Dhamma Education"
+msgstr "धम्म शिक्षा"
+
+msgid "Events"
+msgstr "कार्यक्रम व गतिविधियाँ"
+
+msgid "Photo Gallery"
+msgstr "फोटो गैलरी"
+
+msgid "YouTube Videos"
+msgstr "YouTube वीडियो"
+
+msgid "Articles"
+msgstr "धम्म लेख"
+
+msgid "Contact Us"
+msgstr "संपर्क करें"
+
+msgid "Menu"
+msgstr "मेनू"
+
+msgid "Language:"
+msgstr "भाषा:"
+
+msgid "Skip to main content"
+msgstr "मुख्य सामग्री पर जाएं"
+
+msgid "Search"
+msgstr "खोजें"
+
+msgid "Administrator Login"
+msgstr "व्यवस्थापक लॉगिन"
+
+msgid "Admin"
+msgstr "व्यवस्थापक"
+
+msgid "Admin Portal"
+msgstr "व्यवस्थापक पोर्टल"
+
+msgid "Admin Dashboard"
+msgstr "व्यवस्थापक डैशबोर्ड"
+
+msgid "Spreading Buddha Dhamma • Equality • Compassion • Scientific Inquiry"
+msgstr "बुद्ध धम्म का प्रसार • समता • करुणा • वैज्ञानिक दृष्टिकोण"
+
+msgid "Buddha Dhamma Education & Community"
+msgstr "बुद्ध धम्म शिक्षा एवं सामाजिक अभियान"
+
+msgid "Buddha Dhamma Education (15 Principles)"
+msgstr "बुद्ध धम्म शिक्षा (१५ सिद्धांत)"
+
+msgid "Events & Activities"
+msgstr "कार्यक्रम एवं गतिविधियाँ"
+
+msgid "Event Photo Gallery"
+msgstr "कार्यक्रम फोटो गैलरी"
+
+msgid "Articles & Dhamma Resources"
+msgstr "लेख और धम्म संसाधन"
+
+msgid "Explore Buddha Dhamma"
+msgstr "बुद्ध धम्म शिक्षा देखें"
+
+msgid "View Our Events"
+msgstr "हमारे कार्यक्रम देखें"
+
+msgid "Watch on YouTube"
+msgstr "YouTube पर देखें"
+
+msgid "About the Initiative"
+msgstr "अभियान के बारे में"
+
+msgid "Our Mission"
+msgstr "हमारा उद्देश्य"
+
+msgid "Our Vision"
+msgstr "हमारा दृष्टिकोण"
+
+msgid "Educate, Practise & Serve with Compassion"
+msgstr "शिक्षा, आचरण और करुणा से समाज सेवा"
+
+msgid "A Society Rooted in Liberty, Equality & Fraternity"
+msgstr "स्वतंत्रता, समता और बंधुता पर आधारित समाज"
+
+msgid "Sila (Virtue) • Samadhi (Mindfulness) • Panna (Wisdom)"
+msgstr "शील (सदाचार) • समाधि (ध्यान) • प्रज्ञा (विवेक)"
+
+msgid "100% Humanity • Equal Dignity for All"
+msgstr "१००% मानवता • सभी के लिए समान मानवीय गरिमा"
+
+msgid "Core Educational Curriculum"
+msgstr "मूल शैक्षिक पाठ्यक्रम"
+
+msgid "The 15 Principles for Developing Dhamma Teachers"
+msgstr "धम्म शिक्षक विकसित करने के १५ सिद्धांत"
+
+msgid "Explore All 15 Principles"
+msgstr "सभी १५ सिद्धांतों का अध्ययन करें"
+
+msgid "Read Detailed Study Note"
+msgstr "विस्तृत अध्ययन विवरण पढ़ें"
+
+msgid "View in List"
+msgstr "सूची में देखें"
+
+msgid "Multilingual Study Materials"
+msgstr "बहुभाषी अध्ययन सामग्री"
+
+msgid "Featured Dhamma Learning Resources"
+msgstr "प्रमुख धम्म अध्ययन संसाधन"
+
+msgid "Articles and study guides in English, Marathi (मराठी), and Hindi (हिन्दी)."
+msgstr "अंग्रेजी, मराठी और हिंदी में धम्म लेख और अध्ययन मार्गदर्शिका।"
+
+msgid "View All Articles & Resources"
+msgstr "सभी लेख और सामग्री देखें"
+
+msgid "Read Full Teaching"
+msgstr "पूरा लेख पढ़ें"
+
+msgid "Community Action & Study"
+msgstr "सामुदायिक कार्य और अध्ययन"
+
+msgid "Latest Community Events & Seminars"
+msgstr "नवीनतम कार्यक्रम और कार्यशालाएं"
+
+msgid "Browse All Events"
+msgstr "सभी कार्यक्रम देखें"
+
+msgid "Upcoming"
+msgstr "आगामी"
+
+msgid "Upcoming Event"
+msgstr "आगामी कार्यक्रम"
+
+msgid "Past Event"
+msgstr "पूर्व कार्यक्रम"
+
+msgid "View Event Details & Media"
+msgstr "कार्यक्रम विवरण और चित्र देखें"
+
+msgid "View Event Details"
+msgstr "कार्यक्रम विवरण देखें"
+
+msgid "Visual Documentation"
+msgstr "चित्र दस्तावेजीकरण"
+
+msgid "Recent Event Photo Albums"
+msgstr "हाल के फोटो एलबम"
+
+msgid "Open Full Photo Gallery"
+msgstr "पूरी फोटो गैलरी खोलें"
+
+msgid "Open Album"
+msgstr "एलबम खोलें"
+
+msgid "Featured YouTube Videos"
+msgstr "प्रमुख YouTube वीडियो"
+
+msgid "Explore Video Library"
+msgstr "वीडियो संग्रह देखें"
+
+msgid "Watch Video"
+msgstr "वीडियो देखें"
+
+msgid "Watch"
+msgstr "देखें"
+
+msgid "Educator & Organizer"
+msgstr "शिक्षक और संगठनकर्ता"
+
+msgid "Connect with 100% HUMANITY"
+msgstr "100% HUMANITY से संपर्क करें"
+
+msgid "Send an Inquiry"
+msgstr "पूछताछ भेजें"
+
+msgid "Read More About Us"
+msgstr "हमारे बारे में और जानें"
+
+msgid "Platform Sections"
+msgstr "वेबसाइट अनुभाग"
+
+msgid "Ethics & Governance"
+msgstr "नैतिकता और नीतियां"
+
+msgid "Contact Information"
+msgstr "संपर्क विवरण"
+
+msgid "Privacy Policy & Photo Consent"
+msgstr "गोपनीयता नीति और फोटो सहमति"
+
+msgid "Terms of Use & Non-Certification Notice"
+msgstr "उपयोग की शर्तें और गैर-प्रमाणन सूचना"
+
+msgid "Report Incorrect Content / Photo Removal"
+msgstr "गलत जानकारी / फोटो हटाने का अनुरोध"
+
+msgid "Administrator Dashboard (/admin)"
+msgstr "व्यवस्थापक डैशबोर्ड (/admin)"
+
+msgid "XML Sitemap"
+msgstr "XML साइटमैप"
+
+msgid "Person:"
+msgstr "संपर्क व्यक्ति:"
+
+msgid "Email:"
+msgstr "ईमेल:"
+
+msgid "Phone:"
+msgstr "फोन:"
+
+msgid "YouTube: 100% HUMANITY"
+msgstr "YouTube: 100% HUMANITY"
+
+msgid "Founder & Organizer:"
+msgstr "संस्थापक और संगठनकर्ता:"
+
+msgid "Guided by Compassionate Inquiry, Equality, and Human Dignity."
+msgstr "करुणा, समता, मानवीय गरिमा और वैज्ञानिक सोच से प्रेरित।"
+
+msgid "About 100% HUMANITY"
+msgstr "100% HUMANITY के बारे में"
+
+msgid "15 Principles for Dhamma Teachers"
+msgstr "धम्म शिक्षकों के लिए १५ सिद्धांत"
+
+msgid "Community Events & Seminars"
+msgstr "सामुदायिक कार्यक्रम और संगोष्ठी"
+
+msgid "Event Photo Albums"
+msgstr "कार्यक्रम फोटो एलबम"
+
+msgid "100% HUMANITY YouTube Videos"
+msgstr "100% HUMANITY YouTube वीडियो"
+
+msgid "Dhamma Articles & Marathi/Hindi Study"
+msgstr "धम्म लेख और अध्ययन सामग्री"
+
+msgid "Close"
+msgstr "बंद करें"
+
+msgid "Close (Esc)"
+msgstr "बंद करें (Esc)"
+
+msgid "Previous"
+msgstr "पिछला"
+
+msgid "Next"
+msgstr "अगला"
+
+msgid "Previous photograph"
+msgstr "पिछला चित्र"
+
+msgid "Next photograph"
+msgstr "अगला चित्र"
+
+msgid "Photograph Lightbox"
+msgstr "फोटो लाइटबॉक्स"
+
+msgid "Details"
+msgstr "विवरण"
+
+msgid "Practical Application:"
+msgstr "व्यावहारिक अनुप्रयोग:"
+
+msgid "Study & Learning Focus:"
+msgstr "अध्ययन एवं अभ्यास केंद्र:"
+
+msgid "View in Focus Modal"
+msgstr "विस्तार से पढ़ें"
+
+msgid "All Topics"
+msgstr "सभी विषय"
+
+msgid "All Categories"
+msgstr "सभी श्रेणियां"
+
+msgid "All Events"
+msgstr "सभी कार्यक्रम"
+
+msgid "Upcoming Events"
+msgstr "आगामी कार्यक्रम"
+
+msgid "Past Events"
+msgstr "पूर्व कार्यक्रम"
+
+msgid "All Videos"
+msgstr "सभी वीडियो"

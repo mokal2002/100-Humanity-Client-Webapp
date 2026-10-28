@@ -1,0 +1,123 @@
+{% extends "base.html" %}
+{% load i18n static %}
+
+{% block title %}{% trans "Photo Gallery" %} — {{ site_settings.site_name }}{% endblock %}
+
+{% block content %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
+    <div>
+      <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{% trans "Community Visual Archive" %}</span>
+      <h1 class="text-3xl font-bold text-[#1B365D] font-heading mt-1">{% trans "Photo Gallery &amp; Albums" %}</h1>
+      <p class="text-sm text-slate-600 mt-1">{% trans "Browse photographs from 100% HUMANITY study circles, meditation sessions, and community gatherings." %}</p>
+    </div>
+    {% if user.is_staff %}
+      <a href="{% url 'gallery:bulk_upload' %}" class="px-4 py-2.5 rounded-xl bg-[#1B365D] hover:bg-[#0F2544] text-white text-xs font-semibold shadow-sm transition self-start sm:self-auto">
+        {% trans "+ Upload Multiple Photos" %}
+      </a>
+    {% endif %}
+  </div>
+
+  {% if categories %}
+    <div class="bg-white rounded-2xl p-4 border border-[#E6DEC8] shadow-sm flex flex-wrap gap-2" role="navigation" aria-label="{% trans 'Album Categories' %}">
+      <a href="{% url 'gallery:album_list' %}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if not selected_category %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
+        {% trans "All Categories" %}
+      </a>
+      {% for cat in categories %}
+        <a href="{% url 'gallery:album_list' %}?category={{ cat|urlencode }}" class="px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if selected_category == cat %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
+          {{ cat }}
+        </a>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Photo Albums Section -->
+  {% if albums %}
+    <div class="space-y-4">
+      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Photo Albums" %}</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for album in albums %}
+          <article class="bg-white rounded-2xl overflow-hidden border border-[#E6DEC8] shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="relative h-48 bg-slate-200">
+                {% if album.effective_cover_url %}
+                  <a href="{{ album.get_absolute_url }}">
+                    <img src="{{ album.effective_cover_url }}" alt="{{ album.title }}" loading="lazy" class="w-full h-full object-cover" />
+                  </a>
+                {% else %}
+                  <div class="w-full h-full bg-[#1B365D] flex items-center justify-center text-[#D49B38] text-4xl font-bold">☸</div>
+                {% endif %}
+                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#1B365D] text-white">
+                  {{ album.category }}
+                </span>
+                <span class="absolute bottom-3 left-3 px-2 py-0.5 rounded text-xs bg-slate-900/80 text-white font-medium">
+                  {{ album.published_photos_count }} {% trans "photos" %}
+                </span>
+              </div>
+              <div class="p-6">
+                <h3 class="text-base font-bold text-[#1B365D] font-heading mb-1.5">
+                  <a href="{{ album.get_absolute_url }}" class="hover:text-[#C87D20]">{{ album.title }}</a>
+                </h3>
+                <p class="text-sm text-slate-600 line-clamp-2 leading-relaxed">{{ album.description|truncatewords:18 }}</p>
+              </div>
+            </div>
+            <div class="p-6 pt-0">
+              <a href="{{ album.get_absolute_url }}" class="w-full block text-center px-4 py-2 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8] text-xs font-bold text-[#1B365D] hover:bg-amber-50 transition">
+                {% trans "Open Album" %} &rarr;
+              </a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    </div>
+  {% endif %}
+
+  <!-- Recent Photographs Grid with Lightbox -->
+  {% if page_obj and page_obj.object_list %}
+    <div class="space-y-4 pt-6 border-t border-slate-200">
+      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Recent Photographs" %}</h2>
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
+        {% for photo in page_obj %}
+          <div class="bg-white rounded-xl overflow-hidden border border-[#E6DEC8] shadow-sm group">
+            <div class="relative h-44 bg-slate-100 overflow-hidden cursor-pointer" onclick="openSingleLightbox('{{ photo.image_url }}', '{{ photo.title|escapejs }}', '{{ photo.album.title|escapejs }}')">
+              <img src="{{ photo.image_url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-2.5 text-white">
+                <span class="text-xs font-medium">🔍 {% trans "View Full Size" %}</span>
+              </div>
+            </div>
+            <div class="p-3">
+              <h4 class="font-bold text-xs text-[#1B365D] line-clamp-1">{{ photo.title }}</h4>
+              <p class="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{{ photo.album.title }}</p>
+            </div>
+          </div>
+        {% endfor %}
+      </div>
+
+      {% include "components/pagination.html" %}
+    </div>
+  {% elif not albums %}
+    <div class="bg-white rounded-2xl p-10 text-center border border-[#E6DEC8] text-slate-600">
+      <h2 class="text-lg font-bold text-[#1B365D]">{% trans "No Photo Albums Published Yet" %}</h2>
+      <p class="text-sm mt-1">{% trans "Photographs will be published after our upcoming community sessions." %}</p>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  function openSingleLightbox(imgUrl, caption, albumTitle) {
+    var modal = document.getElementById('lightbox-modal');
+    var imgEl = document.getElementById('lightbox-image');
+    var albumEl = document.getElementById('lightbox-album-title');
+    var counterEl = document.getElementById('lightbox-counter');
+    var capEl = document.getElementById('lightbox-caption');
+    if (!modal || !imgEl) return;
+
+    imgEl.src = imgUrl;
+    imgEl.alt = caption;
+    if (albumEl) albumEl.textContent = albumTitle || 'Photo Gallery';
+    if (counterEl) counterEl.textContent = '';
+    if (capEl) capEl.textContent = caption || '';
+    modal.classList.remove('hidden');
+  }
+</script>
+{% endblock %}

@@ -1,0 +1,170 @@
+{% load static i18n %}
+<!-- Top Announcement & Multilingual Bar -->
+<div class="bg-[#0F2544] text-amber-100/90 text-[11px] sm:text-xs border-b border-amber-500/20" role="region" aria-label="{% trans 'Top Announcement and Language Bar' %}">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-1.5 sm:py-2 flex flex-wrap items-center justify-between gap-2">
+    <div class="flex items-center gap-2 min-w-0">
+      <span class="inline-block w-2 h-2 rounded-full bg-amber-400 flex-shrink-0"></span>
+      <span class="font-medium tracking-wide truncate sm:whitespace-normal">
+        {% trans "Spreading Buddha Dhamma • Equality • Compassion • Scientific Inquiry" %}
+      </span>
+    </div>
+    <div class="flex items-center gap-3 sm:gap-4 flex-shrink-0">
+      <a href="mailto:{{ site_settings.contact_email }}" class="hover:text-white transition hidden md:inline">{{ site_settings.contact_email }}</a>
+      <a href="tel:{{ site_settings.contact_phone }}" class="hover:text-white transition hidden sm:inline">{{ site_settings.contact_phone }}</a>
+      
+      <!-- Native Multi-Language Switcher -->
+      <form action="{% url 'set_language' %}" method="post" id="lang-switch-form" class="inline-flex items-center gap-1 bg-white/10 rounded-md p-0.5 m-0" role="group" aria-label="{% trans 'Language selector' %}">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+        {% get_current_language as CURRENT_LANG %}
+        <button type="submit" name="language" value="en" class="px-2 py-0.5 rounded text-[11px] sm:text-xs font-semibold whitespace-nowrap transition {% if CURRENT_LANG == 'en' %}bg-amber-500 text-slate-950 font-bold shadow-sm{% else %}text-amber-100 hover:bg-white/15{% endif %}" title="Switch to English">English</button>
+        <button type="submit" name="language" value="mr" class="px-2 py-0.5 rounded text-[11px] sm:text-xs font-semibold whitespace-nowrap transition {% if CURRENT_LANG == 'mr' %}bg-amber-500 text-slate-950 font-bold shadow-sm{% else %}text-amber-100 hover:bg-white/15{% endif %}" title="मराठी मध्ये वाचा">मराठी</button>
+        <button type="submit" name="language" value="hi" class="px-2 py-0.5 rounded text-[11px] sm:text-xs font-semibold whitespace-nowrap transition {% if CURRENT_LANG == 'hi' %}bg-amber-500 text-slate-950 font-bold shadow-sm{% else %}text-amber-100 hover:bg-white/15{% endif %}" title="हिन्दी में पढ़ें">हिन्दी</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+<!-- Main Sticky Header Navigation -->
+<header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-[#E6DEC8] shadow-sm">
+  <div class="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+    <div class="flex items-center justify-between h-16 sm:h-20 gap-2">
+      <!-- Brand Logo with Arvind Betkar 100% Humanity Emblem -->
+      <a href="{% url 'core:home' %}" class="flex items-center gap-2.5 sm:gap-3 text-left group focus:outline-none flex-shrink-0">
+        <div class="w-10 h-10 sm:w-12 sm:h-12 rounded-full overflow-hidden flex items-center justify-center border-2 border-[#D49B38] shadow-sm bg-white flex-shrink-0 transition transform group-hover:scale-105">
+          <img src="{% static 'images/logo.svg' %}" alt="{{ site_settings.site_name }}" class="w-full h-full object-contain" />
+        </div>
+        <div class="flex-shrink-0">
+          <span class="block text-base sm:text-lg xl:text-xl font-bold tracking-tight text-[#1B365D] leading-none whitespace-nowrap">{{ site_settings.site_name }}</span>
+          <span class="hidden 2xl:block text-[11px] text-slate-600 mt-1 font-medium whitespace-nowrap">{% trans "Buddha Dhamma Education & Community" %}</span>
+        </div>
+      </a>
+
+      <!-- Desktop Navigation Links (Now guaranteed single-line with whitespace-nowrap and sleek responsive sizing) -->
+      <nav class="hidden lg:flex items-center gap-0.5 xl:gap-1.5 flex-shrink" aria-label="{% trans 'Primary Navigation' %}">
+        <a href="{% url 'core:home' %}" class="inline-flex items-center px-2 py-1.5 xl:px-3 xl:py-2 rounded-lg text-xs xl:text-sm whitespace-nowrap transition {% if request.resolver_match.url_name == 'home' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-300/60{% else %}font-medium text-slate-700 hover:text-[#1B365D] hover:bg-slate-100{% endif %}">
+          {% trans "Home" %}
+        </a>
+        <a href="{% url 'core:about' %}" class="inline-flex items-center px-2 py-1.5 xl:px-3 xl:py-2 rounded-lg text-xs xl:text-sm whitespace-nowrap transition {% if request.resolver_match.url_name == 'about' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-300/60{% else %}font-medium text-slate-700 hover:text-[#1B365D] hover:bg-slate-100{% endif %}">
+          {% trans "About Us" %}
+        </a>
+        <a href="{% url 'education:principle_list' %}" class="inline-flex items-center px-2 py-1.5 xl:px-3 xl:py-2 rounded-lg text-xs xl:text-sm whitespace-nowrap transition {% if request.resolver_match.namespace == 'education' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-300/60{% else %}font-medium text-slate-700 hover:text-[#1B365D] hover:bg-slate-100{% endif %}">
+          {% trans "Dhamma Education" %}
+        </a>
+        <a href="{% url 'events:event_list' %}" class="inline-flex items-center px-2 py-1.5 xl:px-3 xl:py-2 rounded-lg text-xs xl:text-sm whitespace-nowrap transition {% if request.resolver_match.namespace == 'events' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-300/60{% else %}font-medium text-slate-700 hover:text-[#1B365D] hover:bg-slate-100{% endif %}">
+          {% trans "Events" %}
+        </a>
+        <a href="{% url 'gallery:album_list' %}" class="inline-flex items-center px-2 py-1.5 xl:px-3 xl:py-2 rounded-lg text-xs xl:text-sm whitespace-nowrap transition {% if request.resolver_match.namespace == 'gallery' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-300/60{% else %}font-medium text-slate-700 hover:text-[#1B365D] hover:bg-slate-100{% endif %}">
+          {% trans "Photo Gallery" %}
+        </a>
+        <a href="{% url 'videos:video_list' %}" class="inline-flex items-center px-2 py-1.5 xl:px-3 xl:py-2 rounded-lg text-xs xl:text-sm whitespace-nowrap transition {% if request.resolver_match.namespace == 'videos' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-300/60{% else %}font-medium text-slate-700 hover:text-[#1B365D] hover:bg-slate-100{% endif %}">
+          {% trans "YouTube Videos" %}
+        </a>
+        <a href="{% url 'articles:article_list' %}" class="inline-flex items-center px-2 py-1.5 xl:px-3 xl:py-2 rounded-lg text-xs xl:text-sm whitespace-nowrap transition {% if request.resolver_match.namespace == 'articles' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-300/60{% else %}font-medium text-slate-700 hover:text-[#1B365D] hover:bg-slate-100{% endif %}">
+          {% trans "Articles" %}
+        </a>
+      </nav>
+
+      <!-- Right CTA & Admin Access (Guaranteed single-line) -->
+      <div class="hidden lg:flex items-center gap-1.5 xl:gap-2.5 flex-shrink-0">
+        <a href="{% url 'contact:contact' %}" class="inline-flex items-center px-3 py-1.5 xl:px-4 xl:py-2 rounded-xl text-xs xl:text-sm font-bold bg-[#1B365D] text-white hover:text-white hover:bg-[#0F2544] transition-all duration-200 shadow-sm whitespace-nowrap no-underline">
+          {% trans "Contact Us" %}
+        </a>
+        <a href="{% url 'admin:index' %}" class="inline-flex items-center gap-1.5 px-2.5 py-1.5 xl:px-3 xl:py-2 rounded-xl text-xs font-semibold border border-[#D49B38] text-[#1B365D] hover:text-[#1B365D] bg-[#FAF7F0] hover:bg-amber-100/80 transition-all duration-200 whitespace-nowrap no-underline">
+          {% if user.is_staff %}
+            <span class="w-2 h-2 rounded-full bg-emerald-600 inline-block flex-shrink-0"></span>
+            <span class="hidden xl:inline">{% trans "Admin Dashboard" %}</span>
+            <span class="xl:hidden">{% trans "Admin" %}</span>
+          {% else %}
+            <span>{% trans "Admin Portal" %}</span>
+          {% endif %}
+        </a>
+      </div>
+
+      <!-- Mobile Controls (Admin link + Hamburger button) -->
+      <div class="flex items-center lg:hidden gap-1.5 sm:gap-2 flex-shrink-0">
+        <a href="{% url 'admin:index' %}" class="px-2.5 py-1.5 rounded-lg text-[11px] sm:text-xs font-bold border border-[#D49B38] text-[#1B365D] bg-[#FAF7F0] hover:bg-amber-50 transition whitespace-nowrap">
+          {% if user.is_staff %}{% trans "Admin" %}{% else %}{% trans "Login" %}{% endif %}
+        </a>
+        <button type="button" id="mobile-menu-btn" onclick="toggleMobileNav()" aria-expanded="false" aria-controls="mobile-nav-drawer" aria-label="{% trans 'Toggle navigation menu' %}" class="p-2 sm:p-2.5 rounded-lg text-slate-700 hover:bg-slate-100 transition focus:outline-none">
+          <svg id="hamburger-icon" class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+          </svg>
+          <svg id="close-icon" class="w-6 h-6 hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Mobile Navigation Drawer -->
+  <div id="mobile-nav-drawer" class="hidden lg:hidden bg-white border-b border-[#E6DEC8] px-4 pt-3 pb-6 space-y-1.5 shadow-xl max-h-[calc(100vh-80px)] overflow-y-auto">
+    <!-- Mobile Language Selector Inside Drawer -->
+    <div class="pb-3 mb-2 border-b border-slate-100 flex items-center justify-between">
+      <span class="text-xs font-bold text-slate-600 uppercase tracking-wider">{% trans "Language:" %}</span>
+      <form action="{% url 'set_language' %}" method="post" class="inline-flex items-center gap-1 bg-slate-100 rounded-lg p-1 m-0">
+        {% csrf_token %}
+        <input name="next" type="hidden" value="{{ request.get_full_path }}" />
+        <button type="submit" name="language" value="en" class="px-2.5 py-1 rounded text-xs font-semibold whitespace-nowrap {% if CURRENT_LANG == 'en' %}bg-[#1B365D] text-white{% else %}text-slate-700 hover:bg-white{% endif %}">English</button>
+        <button type="submit" name="language" value="mr" class="px-2.5 py-1 rounded text-xs font-semibold whitespace-nowrap {% if CURRENT_LANG == 'mr' %}bg-[#1B365D] text-white{% else %}text-slate-700 hover:bg-white{% endif %}">मराठी</button>
+        <button type="submit" name="language" value="hi" class="px-2.5 py-1 rounded text-xs font-semibold whitespace-nowrap {% if CURRENT_LANG == 'hi' %}bg-[#1B365D] text-white{% else %}text-slate-700 hover:bg-white{% endif %}">हिन्दी</button>
+      </form>
+    </div>
+
+    <!-- Mobile Nav Links with Active Highlighting -->
+    <a href="{% url 'core:home' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.url_name == 'home' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Home" %}</a>
+    <a href="{% url 'core:about' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.url_name == 'about' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "About Us" %}</a>
+    <a href="{% url 'education:principle_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'education' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Buddha Dhamma Education (15 Principles)" %}</a>
+    <a href="{% url 'events:event_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'events' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Events & Activities" %}</a>
+    <a href="{% url 'gallery:album_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'gallery' %}font-bold text-[#1B365D] bg-amber-100/80 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Event Photo Gallery" %}</a>
+    <a href="{% url 'videos:video_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'videos' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "YouTube Videos" %}</a>
+    <a href="{% url 'articles:article_list' %}" class="block w-full text-left px-3.5 py-2.5 rounded-xl text-sm transition {% if request.resolver_match.namespace == 'articles' %}font-bold text-[#1B365D] bg-amber-50 border border-amber-200/80{% else %}font-medium text-slate-700 hover:bg-slate-100{% endif %}">{% trans "Articles & Dhamma Resources" %}</a>
+    
+    <div class="pt-2">
+      <a href="{% url 'contact:contact' %}" class="block w-full text-center px-4 py-3 rounded-xl text-sm font-bold bg-[#1B365D] text-white hover:bg-[#0F2544] transition shadow-md">{% trans "Contact Us" %}</a>
+    </div>
+  </div>
+</header>
+
+<script>
+  function toggleMobileNav(forceState) {
+    var drawer = document.getElementById('mobile-nav-drawer');
+    var btn = document.getElementById('mobile-menu-btn');
+    var burger = document.getElementById('hamburger-icon');
+    var close = document.getElementById('close-icon');
+    if (!drawer) return;
+    
+    var isCurrentlyHidden = drawer.classList.contains('hidden');
+    var shouldOpen = forceState !== undefined ? forceState : isCurrentlyHidden;
+    
+    if (shouldOpen) {
+      drawer.classList.remove('hidden');
+      if (btn) btn.setAttribute('aria-expanded', 'true');
+      if (burger) burger.classList.add('hidden');
+      if (close) close.classList.remove('hidden');
+    } else {
+      drawer.classList.add('hidden');
+      if (btn) btn.setAttribute('aria-expanded', 'false');
+      if (burger) burger.classList.remove('hidden');
+      if (close) close.classList.add('hidden');
+    }
+  }
+
+  // Close mobile drawer on resize to desktop (1024px+)
+  window.addEventListener('resize', function() {
+    if (window.innerWidth >= 1024) {
+      toggleMobileNav(false);
+    }
+  });
+
+  // Close mobile drawer when clicking outside
+  document.addEventListener('click', function(e) {
+    var drawer = document.getElementById('mobile-nav-drawer');
+    var btn = document.getElementById('mobile-menu-btn');
+    if (!drawer || drawer.classList.contains('hidden')) return;
+    if (!drawer.contains(e.target) && (!btn || !btn.contains(e.target))) {
+      toggleMobileNav(false);
+    }
+  });
+</script>

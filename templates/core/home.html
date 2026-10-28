@@ -1,0 +1,393 @@
+{% extends "base.html" %}
+{% load static i18n %}
+
+{% block content %}
+<!-- Section 2: Hero Section -->
+<section class="relative bg-[#0F2544] text-white overflow-hidden border-b-4 border-[#D49B38]">
+  <div class="absolute inset-0 opacity-35">
+    <img src="{% static 'images/buddha-hero.jpg' %}" onerror="this.src='{% static 'images/dhamma-wheel.svg' %}'; this.classList.add('p-20', 'opacity-20');" alt="{% trans 'Peaceful Buddhist courtyard and Bodhi tree pavilion' %}" class="w-full h-full object-cover" />
+    <div class="absolute inset-0 bg-gradient-to-r from-[#0F2544] via-[#0F2544]/85 to-transparent"></div>
+  </div>
+  <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">
+    <div class="lg:col-span-8 space-y-6">
+      <div class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-white/10 border border-amber-400/40 text-amber-200 text-xs font-semibold tracking-wide">
+        <span>☸</span><span>{{ site_settings.site_name }} • {% trans "BUDDHA DHAMMA EDUCATION &amp; COMMUNITY" %}</span>
+      </div>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-bold font-heading leading-tight text-white">
+        {{ site_settings.hero_title }}
+      </h1>
+      <p class="text-base sm:text-lg text-slate-200 max-w-2xl leading-relaxed">
+        {{ site_settings.hero_subtitle }}
+      </p>
+      <div class="flex flex-wrap items-center gap-3.5 pt-2">
+        <a href="{% url 'education:principle_list' %}" class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-[#D49B38] hover:bg-[#C87D20] text-slate-950 hover:text-slate-950 font-bold text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 no-underline">
+          {% trans "Explore Buddha Dhamma" %}
+        </a>
+        <a href="{% url 'events:event_list' %}" class="inline-flex items-center justify-center px-6 py-3.5 rounded-xl bg-white/15 hover:bg-white/25 text-white hover:text-white border border-white/30 font-semibold text-sm shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5 no-underline">
+          {% trans "View Our Events" %}
+        </a>
+        {% if site_settings.youtube_channel_url %}
+          <a href="{{ site_settings.youtube_channel_url }}" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#E62117] hover:bg-[#CC1810] text-white hover:text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 no-underline">
+            <span class="text-base leading-none">▶</span><span>{% trans "Watch on YouTube" %}</span>
+          </a>
+        {% else %}
+          <a href="{% url 'videos:video_list' %}" class="inline-flex items-center justify-center gap-2 px-5 py-3.5 rounded-xl bg-[#E62117] hover:bg-[#CC1810] text-white hover:text-white font-semibold text-sm shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5 no-underline">
+            <span class="text-base leading-none">▶</span><span>{% trans "Watch on YouTube" %}</span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+    <div class="lg:col-span-4">
+      <div class="bg-white/10 backdrop-blur-md border border-amber-300/30 rounded-2xl p-6 space-y-4 shadow-2xl">
+        <div class="flex items-center gap-3.5">
+          <div class="w-12 h-12 rounded-full bg-[#D49B38] text-slate-950 font-bold text-lg flex items-center justify-center shadow">AB</div>
+          <div>
+            <h2 class="text-base font-bold text-white">{{ site_settings.contact_person }}</h2>
+            <p class="text-xs text-amber-200">{% trans "Buddha Dhamma Educator &amp; Community Organizer" %}</p>
+          </div>
+        </div>
+        <p class="text-xs sm:text-sm text-slate-200 leading-relaxed">
+          {% trans "Dedicated to sharing the rational, ethical, and compassionate teachings of Gautama Buddha, nurturing community study circles, and promoting equality and human dignity across society." %}
+        </p>
+        <div class="pt-2 border-t border-white/15 flex items-center justify-between text-xs text-amber-200">
+          <a href="mailto:{{ site_settings.contact_email }}" class="hover:underline">✉ {{ site_settings.contact_email }}</a>
+          <a href="tel:{{ site_settings.contact_phone }}" class="hover:underline">☎ {{ site_settings.contact_phone }}</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 3 & 4: Introduction to 100% HUMANITY + Mission and Vision -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
+    <div class="lg:col-span-5 bg-white rounded-2xl p-7 border border-[#E6DEC8] shadow-sm flex flex-col justify-between">
+      <div class="space-y-3">
+        <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{% trans "About the Initiative" %}</span>
+        <h2 class="text-2xl font-bold text-[#1B365D] font-heading">{{ site_settings.dhamma_intro_title }}</h2>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          {{ site_settings.dhamma_intro_text }}
+        </p>
+        <p class="text-sm text-slate-600 leading-relaxed">
+          {{ site_settings.about_introduction }}
+        </p>
+      </div>
+      <div class="pt-4 mt-4 border-t border-slate-100">
+        <a href="{% url 'core:about' %}" class="text-xs font-bold text-[#1B365D] hover:text-[#C87D20]">{% trans "Read Full Organization Profile" %} &rarr;</a>
+      </div>
+    </div>
+
+    <div class="lg:col-span-7 grid grid-cols-1 sm:grid-cols-2 gap-6">
+      <div class="bg-[#1B365D] text-white rounded-2xl p-7 shadow-sm border border-[#0F2544] flex flex-col justify-between">
+        <div class="space-y-3">
+          <span class="inline-block px-2.5 py-1 rounded bg-amber-400/20 text-amber-300 text-xs font-bold uppercase tracking-wider">{% trans "Our Mission" %}</span>
+          <h3 class="text-xl font-bold font-heading text-white">{% trans "Educate, Practise &amp; Serve with Compassion" %}</h3>
+          <p class="text-sm text-slate-200 leading-relaxed">
+            {{ site_settings.mission_statement }}
+          </p>
+        </div>
+        <div class="pt-4 mt-4 border-t border-white/15 text-xs text-amber-200 font-medium">{% trans "Sila (Virtue) • Samadhi (Mindfulness) • Panna (Wisdom)" %}</div>
+      </div>
+
+      <div class="bg-white rounded-2xl p-7 border border-[#E6DEC8] shadow-sm flex flex-col justify-between">
+        <div class="space-y-3">
+          <span class="inline-block px-2.5 py-1 rounded bg-amber-100 text-[#1B365D] text-xs font-bold uppercase tracking-wider">{% trans "Our Vision" %}</span>
+          <h3 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "A Society Rooted in Liberty, Equality &amp; Fraternity" %}</h3>
+          <p class="text-sm text-slate-600 leading-relaxed">
+            {{ site_settings.vision_statement }}
+          </p>
+        </div>
+        <div class="pt-4 mt-4 border-t border-slate-100 text-xs text-[#C87D20] font-semibold">{% trans "100% Humanity • Equal Dignity for All" %}</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Section 5: The 15 Principles for Developing Dhamma Teachers -->
+<section class="bg-[#F3EDE0] border-y border-[#E6DEC8] py-14 dharma-pattern">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col md:flex-row md:items-end justify-between mb-8 gap-4">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{% trans "Core Educational Curriculum" %}</span>
+        <h2 class="text-2xl sm:text-3xl font-bold text-[#1B365D] font-heading mt-1">{% trans "The 15 Principles for Developing Dhamma Teachers" %}</h2>
+        <p class="text-sm text-slate-600 mt-1 max-w-2xl">
+          {% blocktrans with count=total_principles_count %}A structured educational framework cultivating ethical character, rational inquiry, meditation, and compassionate community leadership ({{ count }} principles).{% endblocktrans %}
+        </p>
+      </div>
+      <a href="{% url 'education:principle_list' %}" class="inline-flex items-center gap-1.5 px-4 py-2.5 rounded-xl bg-[#1B365D] hover:bg-[#0F2544] text-white hover:text-white text-xs sm:text-sm font-semibold shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5 self-start md:self-auto no-underline">
+        <span>{% trans "Explore All 15 Principles" %}</span>
+        <span aria-hidden="true">&rarr;</span>
+      </a>
+    </div>
+
+    {% if featured_principles %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for p in featured_principles %}
+          <article class="bg-white rounded-2xl p-6 border border-[#E6DEC8] shadow-sm hover:shadow-md transition flex flex-col justify-between">
+            <div>
+              <div class="flex items-center justify-between mb-3">
+                <span class="w-9 h-9 rounded-xl bg-[#1B365D] text-[#D49B38] font-bold text-sm flex items-center justify-center">#{{ p.principle_number }}</span>
+                <span class="text-xs font-medium px-2.5 py-1 rounded-full bg-[#FAF7F0] text-slate-600 border border-[#E6DEC8]">Principle {{ p.principle_number }}</span>
+              </div>
+              <h3 class="text-base font-bold text-[#1B365D] mb-2 font-heading">{{ p.title }}</h3>
+              <p class="text-sm text-slate-600 leading-relaxed">{{ p.summary }}</p>
+            </div>
+            <div class="mt-4 pt-3 border-t border-slate-100 flex items-center justify-between">
+              <button type="button" onclick="openStudyNote('{{ p.principle_number }}', '{{ p.title|escapejs }}', '{{ p.summary|escapejs }}', '{{ p.detailed_explanation|escapejs }}', '{{ p.practical_guidance|escapejs }}', '{{ p.learning_resources|escapejs }}')" class="text-xs font-semibold text-[#C87D20] hover:text-[#1B365D] inline-flex items-center gap-1">
+                <span>{% trans "Read Detailed Study Note" %}</span><span>&rarr;</span>
+              </button>
+              <a href="{% url 'education:principle_list' %}#principle-{{ p.principle_number }}" class="text-xs text-slate-400 hover:text-[#1B365D]">{% trans "View in List" %}</a>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="bg-white rounded-2xl p-8 text-center border border-[#E6DEC8] text-slate-600">
+        {% trans "Principles will appear here once published." %}
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Section 6: Featured Dhamma Learning Resources (Articles) -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+    <div>
+      <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{% trans "Multilingual Study Materials" %}</span>
+      <h2 class="text-2xl font-bold text-[#1B365D] font-heading mt-1">{% trans "Featured Dhamma Learning Resources" %}</h2>
+      <p class="text-sm text-slate-600 mt-1">{% trans "Articles and study guides in English, Marathi (मराठी), and Hindi (हिन्दी)." %}</p>
+    </div>
+    <a href="{% url 'articles:article_list' %}" class="text-sm font-semibold text-[#1B365D] hover:text-[#C87D20]">{% trans "View All Articles &amp; Resources" %} &rarr;</a>
+  </div>
+
+  {% if latest_articles %}
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+      {% for ar in latest_articles %}
+        <article class="bg-white rounded-2xl overflow-hidden border border-[#E6DEC8] shadow-sm hover:shadow-md transition flex flex-col justify-between p-6">
+          <div>
+            <div class="flex items-center justify-between gap-2 mb-3">
+              <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-[#1B365D]">
+                {% if ar.category %}{{ ar.category.name }}{% else %}Dhamma Study{% endif %}
+              </span>
+              <span class="text-xs text-slate-500">{{ ar.published_at|date:"M j, Y" }}</span>
+            </div>
+            <h3 class="text-base font-bold text-[#1B365D] mb-2 font-heading">{{ ar.title }}</h3>
+            <p class="text-sm text-slate-600 leading-relaxed">{{ ar.summary|truncatewords:28 }}</p>
+          </div>
+          <div class="mt-4 pt-3 border-t border-slate-100">
+            <a href="{{ ar.get_absolute_url }}" class="text-xs font-semibold text-[#1B365D] hover:text-[#C87D20]">{% trans "Read Full Teaching" %} &rarr;</a>
+          </div>
+        </article>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="bg-white rounded-2xl p-8 text-center border border-[#E6DEC8] text-slate-600">
+      <p>{% trans "Articles and learning materials will appear here once published." %}</p>
+    </div>
+  {% endif %}
+</section>
+
+<!-- Section 7: Latest Community Events -->
+<section class="bg-white border-y border-[#E6DEC8] py-14">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{% trans "Community Action &amp; Study" %}</span>
+        <h2 class="text-2xl font-bold text-[#1B365D] font-heading mt-1">{% trans "Latest Community Events &amp; Seminars" %}</h2>
+        <p class="text-sm text-slate-600 mt-1">{% trans "Join our Dhamma education workshops, meditation sessions, and social awareness programs." %}</p>
+      </div>
+      <a href="{% url 'events:event_list' %}" class="text-sm font-semibold text-[#1B365D] hover:text-[#C87D20]">{% trans "Browse All Events" %} &rarr;</a>
+    </div>
+
+    {% if upcoming_events %}
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        {% for ev in upcoming_events %}
+          <article class="bg-[#FAF7F0] rounded-2xl overflow-hidden border border-[#E6DEC8] shadow-sm hover:shadow-md transition flex flex-col">
+            <div class="relative h-48 bg-slate-200">
+              {% if ev.cover_image_url %}
+                <img src="{{ ev.cover_image_url }}" alt="{{ ev.title }}" loading="lazy" class="w-full h-full object-cover" />
+              {% else %}
+                <div class="w-full h-full bg-[#1B365D] flex items-center justify-center text-[#D49B38] text-4xl font-bold">☸</div>
+              {% endif %}
+              <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#1B365D]/90 text-white">
+                {% if ev.is_upcoming %}{% trans "Upcoming" %}{% else %}{% trans "Event" %}{% endif %}
+              </span>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="text-xs text-[#C87D20] font-semibold mb-1">
+                  {{ ev.start_date|date:"M j, Y" }} • {{ ev.venue }}
+                </div>
+                <h3 class="text-base font-bold text-[#1B365D] mb-2 font-heading">{{ ev.title }}</h3>
+                <p class="text-sm text-slate-600 line-clamp-3">{{ ev.description|truncatewords:24 }}</p>
+              </div>
+              <div class="mt-4 pt-3 border-t border-slate-200/60 flex items-center justify-between">
+                <a href="{{ ev.get_absolute_url }}" class="text-xs font-semibold text-[#1B365D] hover:text-[#C87D20]">{% trans "View Event Details &amp; Media" %} &rarr;</a>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="bg-[#FAF7F0] rounded-2xl p-8 text-center border border-[#E6DEC8] text-slate-600">
+        <p>{% trans "Upcoming community events and study circles will be announced here soon." %}</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Section 8: Recent Event Photo Albums -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+  <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+    <div>
+      <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{% trans "Visual Documentation" %}</span>
+      <h2 class="text-2xl font-bold text-[#1B365D] font-heading mt-1">{% trans "Recent Event Photo Albums" %}</h2>
+      <p class="text-sm text-slate-600 mt-1">{% trans "Photographs from Dhamma study circles, community gatherings, and meditation sessions." %}</p>
+    </div>
+    <a href="{% url 'gallery:album_list' %}" class="text-sm font-semibold text-[#1B365D] hover:text-[#C87D20]">{% trans "Open Full Photo Gallery" %} &rarr;</a>
+  </div>
+
+  {% if recent_photos %}
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+      {% for photo in recent_photos %}
+        <div class="bg-white rounded-2xl overflow-hidden border border-[#E6DEC8] shadow-sm group">
+          <div class="relative h-52 bg-slate-100 overflow-hidden cursor-pointer" onclick="openSingleLightbox('{{ photo.image_url }}', '{{ photo.title|escapejs }}', '{{ photo.album.title|escapejs }}')">
+            <img src="{{ photo.image_url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-3 text-white">
+              <span class="text-xs font-medium">🔍 {% trans "Click to view full size" %}</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-[#1B365D] line-clamp-1">{{ photo.title }}</h4>
+            <p class="text-xs text-slate-500 mt-1">{{ photo.album.title }}</p>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="bg-white rounded-2xl p-8 text-center border border-[#E6DEC8] text-slate-600">
+      <p>{% trans "Photographs will be published after our upcoming community sessions." %}</p>
+    </div>
+  {% endif %}
+</section>
+
+<!-- Section 9: Featured YouTube Videos -->
+<section class="bg-[#F3EDE0] border-y border-[#E6DEC8] py-14">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between mb-8 gap-4">
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{{ site_settings.youtube_channel_name }}</span>
+        <h2 class="text-2xl font-bold text-[#1B365D] font-heading mt-1">{% trans "Featured YouTube Videos" %}</h2>
+        <p class="text-sm text-slate-600 mt-1">{% trans "Watch embedded Dhamma talks directly on this page without needing a YouTube account." %}</p>
+      </div>
+      <a href="{% url 'videos:video_list' %}" class="text-sm font-semibold text-[#1B365D] hover:text-[#C87D20]">{% trans "Explore Video Library" %} &rarr;</a>
+    </div>
+
+    {% if featured_videos %}
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        {% for video in featured_videos %}
+          <article class="bg-white rounded-2xl overflow-hidden border border-[#E6DEC8] shadow-sm flex flex-col">
+            <div class="aspect-video w-full bg-slate-900 relative">
+              <iframe class="w-full h-full" src="{{ video.embed_url }}" title="{{ video.title }}" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+            </div>
+            <div class="p-5 flex-1 flex flex-col justify-between">
+              <div>
+                <div class="flex items-center justify-between gap-2 mb-1.5">
+                  <span class="text-xs font-semibold text-[#C87D20]">{% if video.category %}{{ video.category.name }}{% else %}Dhamma Talk{% endif %}</span>
+                  <a href="{{ video.youtube_url }}" target="_blank" rel="noopener noreferrer" class="text-xs font-medium text-[#1B365D] hover:underline">YouTube ↗</a>
+                </div>
+                <h3 class="text-base font-bold text-[#1B365D] font-heading mb-2">{{ video.title }}</h3>
+                <p class="text-sm text-slate-600 line-clamp-3">{{ video.description|default:_("100% HUMANITY YouTube video lecture.") }}</p>
+              </div>
+            </div>
+          </article>
+        {% endfor %}
+      </div>
+    {% else %}
+      <div class="bg-white rounded-2xl p-8 text-center border border-[#E6DEC8] text-slate-600">
+        <p>{% trans "Video talks will be embedded here once published." %}</p>
+      </div>
+    {% endif %}
+  </div>
+</section>
+
+<!-- Section 10 & 11: About Arvind Betkar & Community Participation CTA -->
+<section class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14">
+  <div class="bg-[#1B365D] text-white rounded-3xl p-8 sm:p-10 shadow-xl border border-[#D49B38]/40 grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
+    <div class="lg:col-span-7 space-y-4">
+      <span class="px-3 py-1 rounded-full bg-amber-400/20 text-amber-300 text-xs font-bold uppercase tracking-wider">{% trans "Educator &amp; Organizer" %}</span>
+      <h2 class="text-2xl sm:text-3xl font-bold font-heading text-white">{{ site_settings.community_participation_title }}</h2>
+      <p class="text-sm sm:text-base text-slate-200 leading-relaxed">
+        <strong>{{ site_settings.contact_person }}</strong> {% trans "serves as the founder and Buddha Dhamma educator leading 100% HUMANITY. His work focuses on practical Dhamma literacy, cultivating the 15 principles for community teachers, encouraging scientific thinking, and organizing inclusive community programs." %}
+      </p>
+      <p class="text-sm text-amber-100/90 leading-relaxed">
+        {{ site_settings.community_participation_text }}
+      </p>
+    </div>
+    <div class="lg:col-span-5 bg-white/10 backdrop-blur rounded-2xl p-6 border border-white/15 space-y-4">
+      <h3 class="text-lg font-bold text-white">{% trans "Connect with 100% HUMANITY" %}</h3>
+      <div class="space-y-2 text-sm text-slate-200">
+        <p><strong>{% trans "Organizer:" %}</strong> {{ site_settings.contact_person }}</p>
+        <p><strong>{% trans "Email:" %}</strong> <a href="mailto:{{ site_settings.contact_email }}" class="underline text-amber-300">{{ site_settings.contact_email }}</a></p>
+        <p><strong>{% trans "Phone:" %}</strong> <a href="tel:{{ site_settings.contact_phone }}" class="underline text-amber-300">{{ site_settings.contact_phone }}</a></p>
+      </div>
+      <div class="pt-2 flex flex-wrap gap-3">
+        <a href="{% url 'contact:contact' %}" class="inline-flex items-center justify-center px-5 py-2.5 rounded-xl bg-[#D49B38] hover:bg-[#C87D20] text-slate-950 hover:text-slate-950 font-bold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5 no-underline">{% trans "Send an Inquiry" %}</a>
+        <a href="{% url 'core:about' %}" class="inline-flex items-center justify-center px-4 py-2.5 rounded-xl bg-white/15 hover:bg-white/25 text-white hover:text-white border border-white/20 font-semibold text-xs sm:text-sm shadow-sm hover:shadow-md transition-all duration-200 transform hover:-translate-y-0.5 no-underline">{% trans "Read More About Us" %}</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Modal scripts for study note preview -->
+<script>
+  function escapeHtml(str) {
+    if (!str) return '';
+    var div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function openStudyNote(num, title, summary, explanation, practical, resources) {
+    var modal = document.getElementById('generic-modal');
+    var titleEl = document.getElementById('generic-modal-title');
+    var bodyEl = document.getElementById('generic-modal-body');
+    if (!modal || !titleEl || !bodyEl) return;
+    
+    titleEl.textContent = 'Principle #' + num + ': ' + title;
+    bodyEl.innerHTML = 
+      '<div class="space-y-4">' +
+        '<div class="p-4 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8]">' +
+          '<h4 class="text-xs font-bold uppercase tracking-wider text-[#1B365D] mb-1">Core Summary</h4>' +
+          '<p class="text-slate-800 font-medium text-sm">' + escapeHtml(summary) + '</p>' +
+        '</div>' +
+        '<div>' +
+          '<h4 class="text-sm font-bold text-[#1B365D] mb-1.5">Educational Explanation</h4>' +
+          '<p class="text-sm text-slate-700 leading-relaxed">' + escapeHtml(explanation) + '</p>' +
+        '</div>' +
+        (practical ? '<div><h4 class="text-sm font-bold text-[#1B365D] mb-1">Practical Application</h4><p class="text-sm text-slate-700 leading-relaxed">' + escapeHtml(practical) + '</p></div>' : '') +
+        (resources ? '<div><h4 class="text-sm font-bold text-[#1B365D] mb-1">Study Focus</h4><p class="text-sm text-slate-700 leading-relaxed">' + escapeHtml(resources) + '</p></div>' : '') +
+        '<div class="pt-3 border-t border-slate-200 flex justify-end">' +
+          '<button type="button" onclick="closeGenericModal()" class="px-4 py-2 rounded-xl bg-[#1B365D] text-white text-xs font-semibold">Done Reading</button>' +
+        '</div>' +
+      '</div>';
+    modal.classList.remove('hidden');
+  }
+
+  function openSingleLightbox(imgUrl, caption, albumTitle) {
+    var modal = document.getElementById('lightbox-modal');
+    var imgEl = document.getElementById('lightbox-image');
+    var albumEl = document.getElementById('lightbox-album-title');
+    var counterEl = document.getElementById('lightbox-counter');
+    var capEl = document.getElementById('lightbox-caption');
+    if (!modal || !imgEl) return;
+
+    imgEl.src = imgUrl;
+    imgEl.alt = caption;
+    if (albumEl) albumEl.textContent = albumTitle || 'Photo Gallery';
+    if (counterEl) counterEl.textContent = '';
+    if (capEl) capEl.textContent = caption || '';
+    modal.classList.remove('hidden');
+  }
+</script>
+{% endblock %}

@@ -23,8 +23,8 @@
   --radius-md: 10px;
   --radius-lg: 16px;
   --max-width: 1200px;
-  --font-serif: "Georgia", "Noto Serif", "Noto Serif Devanagari", serif;
-  --font-sans: system-ui, -apple-system, "Segoe UI", Roboto, "Noto Sans", "Noto Sans Devanagari", sans-serif;
+  --font-serif: "Poppins", "Noto Sans Devanagari", sans-serif;
+  --font-sans: "Poppins", "Noto Sans Devanagari", system-ui, -apple-system, sans-serif;
 }
 
 *, *::before, *::after {
@@ -35,6 +35,7 @@ html {
   scroll-behavior: smooth;
   scroll-padding-top: 6.5rem;
   font-size: 16px;
+  font-family: var(--font-sans);
 }
 
 body {

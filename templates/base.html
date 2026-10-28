@@ -14,10 +14,10 @@
   <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
   <meta property="og:url" content="{{ request.build_absolute_uri }}" />
 
-  <!-- Google Fonts: Inter, Merriweather & Noto Sans Devanagari for Marathi and Hindi -->
+  <!-- Google Fonts: Poppins (Latin + Devanagari) & Noto Sans Devanagari for Marathi and Hindi -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
   <!-- Tailwind CSS CDN with Custom Palette Configuration -->
   <script src="https://cdn.tailwindcss.com"></script>
@@ -37,8 +37,8 @@
             }
           },
           fontFamily: {
-            sans: ['Inter', 'Noto Sans Devanagari', 'system-ui', '-apple-system', 'sans-serif'],
-            heading: ['Merriweather', 'Noto Sans Devanagari', 'Georgia', 'serif'],
+            sans: ['Poppins', 'Noto Sans Devanagari', 'system-ui', '-apple-system', 'sans-serif'],
+            heading: ['Poppins', 'Noto Sans Devanagari', 'system-ui', '-apple-system', 'sans-serif'],
           }
         }
       }

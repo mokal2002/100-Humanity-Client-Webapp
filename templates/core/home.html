@@ -4,8 +4,8 @@
 {% block content %}
 <!-- Section 2: Hero Section -->
 <section class="relative bg-[#0F2544] text-white overflow-hidden border-b-4 border-[#D49B38]">
-  <div class="absolute inset-0 opacity-35">
-    <img src="{% static 'images/buddha-hero.jpg' %}" onerror="this.src='{% static 'images/dhamma-wheel.svg' %}'; this.classList.add('p-20', 'opacity-20');" alt="{% trans 'Peaceful Buddhist courtyard and Bodhi tree pavilion' %}" class="w-full h-full object-cover" />
+  <div class="absolute inset-0 opacity-20 flex items-center justify-end overflow-hidden pointer-events-none pr-10">
+    <img src="{% static 'images/dhamma-wheel.svg' %}" alt="{% trans 'Dhamma Wheel Emblem' %}" class="w-[600px] h-[600px] max-w-none opacity-15 filter invert" />
     <div class="absolute inset-0 bg-gradient-to-r from-[#0F2544] via-[#0F2544]/85 to-transparent"></div>
   </div>
   <div class="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 lg:py-24 grid grid-cols-1 lg:grid-cols-12 gap-10 items-center">

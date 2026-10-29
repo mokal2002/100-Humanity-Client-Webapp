@@ -181,7 +181,7 @@ class SiteSettings(models.Model):
         _("Google Analytics Measurement ID (GA4)"),
         max_length=30,
         blank=True,
-        default="",
+        default="G-QRLSPJ2R6J",
         help_text=_(
             "Your Google Analytics 4 Measurement ID starting with 'G-' (e.g. G-XXXXXXXXXX). "
             "Leave blank if not using Google Analytics."

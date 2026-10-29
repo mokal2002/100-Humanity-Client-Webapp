@@ -126,3 +126,13 @@ class CoreViewsAndSettingsTests(TestCase):
         self.assertContains(response, 'id="bg-audio-player"')
         self.assertContains(response, 'Buddham Saranam Gacchami Ambient')
         self.assertContains(response, 'id="music-volume-slider"')
+
+    def test_google_analytics_script_renders_when_configured(self):
+        site = SiteSettings.get_solo()
+        site.google_analytics_id = "G-TEST123456"
+        site.save()
+
+        response = self.client.get(reverse("core:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, "googletagmanager.com/gtag/js?id=G-TEST123456")
+        self.assertContains(response, "gtag('config', 'G-TEST123456');")

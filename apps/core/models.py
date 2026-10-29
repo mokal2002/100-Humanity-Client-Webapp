@@ -168,13 +168,23 @@ class SiteSettings(models.Model):
     instagram_url = models.URLField(_("Instagram URL (Optional)"), blank=True, default="")
     telegram_url = models.URLField(_("Telegram Group/Channel URL (Optional)"), blank=True, default="")
 
-    # SEO Defaults
+    # SEO & Analytics Defaults
     meta_description = models.CharField(
         _("Default Meta Description"),
         max_length=300,
         default=(
             "100% HUMANITY — Educational initiative dedicated to Gautama Buddha's teachings, "
             "Buddha Dhamma, equality, compassion, meditation, scientific thinking, and social awareness."
+        ),
+    )
+    google_analytics_id = models.CharField(
+        _("Google Analytics Measurement ID (GA4)"),
+        max_length=30,
+        blank=True,
+        default="",
+        help_text=_(
+            "Your Google Analytics 4 Measurement ID starting with 'G-' (e.g. G-XXXXXXXXXX). "
+            "Leave blank if not using Google Analytics."
         ),
     )
     footer_note = models.CharField(

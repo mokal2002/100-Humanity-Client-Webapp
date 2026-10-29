@@ -230,4 +230,130 @@ document.addEventListener("DOMContentLoaded", function () {
       });
     });
   }
+
+  // 4. Initialize Background Meditation Audio Controller
+  if (typeof window.initBackgroundMusic === "function") {
+    window.initBackgroundMusic();
+  }
 });
+
+/**
+ * Global Background Meditation Audio Controller
+ */
+window.toggleBackgroundMusic = function () {
+  const audio = document.getElementById("bg-audio-player");
+  const widget = document.getElementById("music-floating-widget");
+  const btnLabel = document.getElementById("music-btn-label");
+  const statusText = document.getElementById("music-status-text");
+  const badge = document.getElementById("music-autoplay-badge");
+  if (!audio) return;
+
+  if (audio.paused) {
+    audio.play().then(() => {
+      localStorage.setItem("100_humanity_music_muted", "false");
+      if (widget) {
+        widget.classList.remove("music-paused");
+        widget.classList.add("music-playing");
+      }
+      if (btnLabel) btnLabel.textContent = "Playing";
+      if (statusText) statusText.textContent = "Playing 🎵";
+      if (badge) badge.classList.add("hidden");
+      if (typeof window.showToast === "function") {
+        window.showToast("Meditation music playing 🎵", "info");
+      }
+    }).catch((err) => {
+      console.warn("Audio playback blocked by browser:", err);
+    });
+  } else {
+    audio.pause();
+    localStorage.setItem("100_humanity_music_muted", "true");
+    if (widget) {
+      widget.classList.remove("music-playing");
+      widget.classList.add("music-paused");
+    }
+    if (btnLabel) btnLabel.textContent = "Muted";
+    if (statusText) statusText.textContent = "Muted 🔇";
+    if (typeof window.showToast === "function") {
+      window.showToast("Meditation music muted 🔇", "info");
+    }
+  }
+};
+
+window.initBackgroundMusic = function () {
+  const audio = document.getElementById("bg-audio-player");
+  const widget = document.getElementById("music-floating-widget");
+  const btnLabel = document.getElementById("music-btn-label");
+  const statusText = document.getElementById("music-status-text");
+  const badge = document.getElementById("music-autoplay-badge");
+  const slider = document.getElementById("music-volume-slider");
+  const volLabel = document.getElementById("music-volume-label");
+  if (!audio || !widget) return;
+
+  // Initialize Volume
+  const rawVol = localStorage.getItem("100_humanity_music_vol");
+  let volPct = rawVol !== null ? parseInt(rawVol, 10) : parseInt(audio.getAttribute("data-default-volume") || "30", 10);
+  if (isNaN(volPct) || volPct < 0) volPct = 30;
+  if (volPct > 100) volPct = 100;
+
+  audio.volume = volPct / 100;
+  if (slider) slider.value = volPct;
+  if (volLabel) volLabel.textContent = `${volPct}%`;
+
+  if (slider) {
+    slider.addEventListener("input", function () {
+      const v = parseInt(this.value, 10);
+      audio.volume = v / 100;
+      if (volLabel) volLabel.textContent = `${v}%`;
+      localStorage.setItem("100_humanity_music_vol", v);
+      if (v === 0) {
+        widget.classList.remove("music-playing");
+        widget.classList.add("music-paused");
+      } else if (audio.paused) {
+        audio.play().catch(() => {});
+        widget.classList.remove("music-paused");
+        widget.classList.add("music-playing");
+      }
+    });
+  }
+
+  // Check user preference
+  const isMuted = localStorage.getItem("100_humanity_music_muted") === "true";
+  if (isMuted) {
+    widget.classList.add("music-paused");
+    if (btnLabel) btnLabel.textContent = "Muted";
+    if (statusText) statusText.textContent = "Muted 🔇";
+    return;
+  }
+
+  // Attempt Autoplay
+  const playPromise = audio.play();
+  if (playPromise !== undefined) {
+    playPromise.then(() => {
+      widget.classList.add("music-playing");
+      if (btnLabel) btnLabel.textContent = "Playing";
+      if (statusText) statusText.textContent = "Playing 🎵";
+    }).catch(() => {
+      // Browser blocked autoplay without user interaction
+      widget.classList.add("music-paused");
+      if (btnLabel) btnLabel.textContent = "Play";
+      if (statusText) statusText.textContent = "Tap to Play";
+      if (badge) badge.classList.remove("hidden");
+
+      const onFirstInteraction = () => {
+        if (localStorage.getItem("100_humanity_music_muted") !== "true") {
+          audio.play().then(() => {
+            widget.classList.remove("music-paused");
+            widget.classList.add("music-playing");
+            if (btnLabel) btnLabel.textContent = "Playing";
+            if (statusText) statusText.textContent = "Playing 🎵";
+            if (badge) badge.classList.add("hidden");
+          }).catch(() => {});
+        }
+        document.removeEventListener("click", onFirstInteraction);
+        document.removeEventListener("keydown", onFirstInteraction);
+      };
+      document.addEventListener("click", onFirstInteraction, { once: true });
+      document.addEventListener("keydown", onFirstInteraction, { once: true });
+    });
+  }
+};

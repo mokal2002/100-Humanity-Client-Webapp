@@ -5,7 +5,7 @@ from django.core.exceptions import ValidationError
 from django.test import TestCase, override_settings
 from django.urls import reverse
 from django.utils import timezone
-from apps.core.models import SiteSettings, EnvironmentSetting
+from apps.core.models import SiteSettings, EnvironmentSetting, BackgroundMusic
 from apps.events.models import Event
 
 
@@ -88,3 +88,41 @@ class CoreViewsAndSettingsTests(TestCase):
         second = EnvironmentSetting(database_url="postgresql://fake")
         with self.assertRaises(ValidationError):
             second.clean()
+
+    def test_background_music_model_and_active_switching(self):
+        track1 = BackgroundMusic.objects.create(
+            title="Track One",
+            audio_url="https://example.com/one.mp3",
+            is_active=True,
+            is_enabled=True,
+            default_volume=35,
+        )
+        self.assertEqual(BackgroundMusic.get_active_track(), track1)
+
+        # Creating or saving track2 as active should deactivate track1
+        track2 = BackgroundMusic.objects.create(
+            title="Track Two",
+            audio_url="https://example.com/two.mp3",
+            is_active=True,
+            is_enabled=True,
+            default_volume=40,
+        )
+        track1.refresh_from_db()
+        self.assertFalse(track1.is_active)
+        self.assertTrue(track2.is_active)
+        self.assertEqual(BackgroundMusic.get_active_track(), track2)
+
+    def test_floating_music_widget_renders_on_pages(self):
+        BackgroundMusic.objects.create(
+            title="Buddham Saranam Gacchami Ambient",
+            audio_url="https://example.com/meditation.mp3",
+            is_active=True,
+            is_enabled=True,
+            default_volume=30,
+        )
+        response = self.client.get(reverse("core:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, 'id="music-floating-widget"')
+        self.assertContains(response, 'id="bg-audio-player"')
+        self.assertContains(response, 'Buddham Saranam Gacchami Ambient')
+        self.assertContains(response, 'id="music-volume-slider"')

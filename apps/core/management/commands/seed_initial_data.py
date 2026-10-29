@@ -8,7 +8,7 @@ from datetime import timedelta
 from django.contrib.auth import get_user_model
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from apps.core.models import SiteSettings, EnvironmentSetting
+from apps.core.models import SiteSettings, EnvironmentSetting, BackgroundMusic
 from apps.education.models import DhammaPrinciple, DEFAULT_DHAMMA_PRINCIPLES
 from apps.events.models import Event
 from apps.gallery.models import GalleryAlbum, GalleryImage
@@ -237,7 +237,31 @@ class Command(BaseCommand):
             )
             self.stdout.write(self.style.SUCCESS("Seeded 3 multilingual articles."))
 
-        # 7. Optional Superuser Provisioning from Environment Variables
+        # 7. Background Meditation Audio Tracks
+        if not BackgroundMusic.objects.exists():
+            BackgroundMusic.objects.create(
+                title="Buddham Saranam Gacchami — Peaceful Meditation Ambient",
+                artist_credit="432Hz Harmonic Meditation Sound & Singing Bowl",
+                audio_url="",
+                is_active=True,
+                is_enabled=True,
+                default_volume=30,
+                loop=True,
+                order=1,
+            )
+            BackgroundMusic.objects.create(
+                title="Serene Bamboo Flute & Meditation Bells",
+                artist_credit="Traditional Asian Meditation Instruments",
+                audio_url="https://commondatastorage.googleapis.com/codeskulptor-assets/Epoq-Lepidoptera.ogg",
+                is_active=False,
+                is_enabled=True,
+                default_volume=25,
+                loop=True,
+                order=2,
+            )
+            self.stdout.write(self.style.SUCCESS("Seeded 2 background meditation audio tracks."))
+
+        # 8. Optional Superuser Provisioning from Environment Variables
         admin_user = os.environ.get("DJANGO_SUPERUSER_USERNAME", "").strip()
         admin_pass = os.environ.get("DJANGO_SUPERUSER_PASSWORD", "").strip()
         admin_email = os.environ.get("DJANGO_SUPERUSER_EMAIL", site_settings.contact_email or "admin@100humanity.org").strip()

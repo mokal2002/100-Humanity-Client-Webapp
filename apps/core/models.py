@@ -443,3 +443,115 @@ class EnvironmentSetting(models.Model):
             return obj
         except Exception:
             return cls(pk=1)
+
+
+class BackgroundMusic(models.Model):
+    """
+    Background meditation audio and music tracks for 100% HUMANITY.
+    Allows administrators to upload audio files (MP3/WAV/OGG) or specify external audio URLs,
+    preview and audition playback in the admin dashboard, set default volume, and designate
+    the active track playing across all pages with a floating mute/play control.
+    """
+    title = models.CharField(
+        _("Track Title"),
+        max_length=150,
+        default="Buddham Saranam Gacchami — Flute Meditation",
+        help_text=_("Display title of the ambient or meditation track."),
+    )
+    artist_credit = models.CharField(
+        _("Artist / Credit"),
+        max_length=150,
+        blank=True,
+        default="Traditional Buddhist Chant & Flute Meditation",
+        help_text=_("Artist, composer, or copyright credit."),
+    )
+    audio_file = models.FileField(
+        _("Audio File (Upload MP3 / WAV / OGG)"),
+        upload_to="audio/",
+        blank=True,
+        null=True,
+        help_text=_("Upload an audio file (MP3, WAV, or OGG). Max 20 MB."),
+    )
+    audio_url = models.URLField(
+        _("External Audio URL (Stream / CDN)"),
+        blank=True,
+        default="",
+        help_text=_(
+            "Or enter a direct URL to an MP3/OGG audio stream (e.g., Cloudinary, CDN, archive.org). "
+            "Used if no audio file is uploaded."
+        ),
+    )
+    is_active = models.BooleanField(
+        _("Active Website Track"),
+        default=False,
+        help_text=_(
+            "Check to set this as the active background track across the entire website. "
+            "Selecting this automatically deactivates other tracks."
+        ),
+    )
+    is_enabled = models.BooleanField(
+        _("Enabled Globally"),
+        default=True,
+        help_text=_("Master toggle: Uncheck to temporarily mute/disable background music on the website."),
+    )
+    default_volume = models.PositiveSmallIntegerField(
+        _("Default Volume (%)"),
+        default=30,
+        help_text=_("Default playback volume percentage (1 to 100). Recommended: 25%–35% for soothing background sound."),
+    )
+    loop = models.BooleanField(
+        _("Loop Playback"),
+        default=True,
+        help_text=_("Continuously repeat the track when it finishes."),
+    )
+    order = models.PositiveIntegerField(
+        _("Display Order"),
+        default=0,
+    )
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now=True)
+
+    class Meta:
+        verbose_name = _("Background Music Track")
+        verbose_name_plural = _("Background Music Tracks")
+        ordering = ["-is_active", "order", "-created_at"]
+
+    def __str__(self):
+        active_indicator = " [ACTIVE ON SITE]" if self.is_active else ""
+        return f"{self.title}{active_indicator}"
+
+    @property
+    def effective_audio_url(self):
+        """Returns the local uploaded file URL, or the external URL, or static fallback."""
+        if self.audio_file:
+            try:
+                return self.audio_file.url
+            except Exception:
+                pass
+        if self.audio_url and self.audio_url.strip():
+            return self.audio_url.strip()
+        from django.templatetags.static import static
+        return static("audio/meditation-ambient.wav")
+
+    def clean(self):
+        if self.default_volume > 100:
+            self.default_volume = 100
+        elif self.default_volume < 1:
+            self.default_volume = 1
+
+    def save(self, *args, **kwargs):
+        # Enforce that only one track is active at any time
+        if self.is_active:
+            BackgroundMusic.objects.exclude(pk=self.pk).update(is_active=False)
+        super().save(*args, **kwargs)
+
+    @classmethod
+    def get_active_track(cls):
+        """Returns the currently active and enabled track, or fallback default."""
+        try:
+            track = cls.objects.filter(is_active=True, is_enabled=True).first()
+            if not track:
+                track = cls.objects.filter(is_enabled=True).first()
+            return track
+        except Exception:
+            return None

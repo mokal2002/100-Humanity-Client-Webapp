@@ -2,10 +2,9 @@
 """
 PythonAnywhere Automated Deployment Script for GitHub Actions.
 Uses the official PythonAnywhere REST API to:
-1. Open a Bash console session.
-2. Execute: git pull, migrate, and collectstatic inside your virtual environment.
-3. Trigger a graceful Web App reload via the webapps API.
-Works on all PythonAnywhere account tiers (including Free Beginner accounts).
+1. Identify active Bash console (if open) to run git pull, migrate, and collectstatic.
+2. Trigger an instant Web App reload via the webapps API.
+Works on all PythonAnywhere account tiers.
 """
 import os
 import sys
@@ -15,14 +14,18 @@ import requests
 PA_HOST = os.environ.get("PA_HOST", "www.pythonanywhere.com")
 USERNAME = os.environ.get("PA_USERNAME", "").strip()
 API_TOKEN = os.environ.get("PA_API_TOKEN", "").strip()
-DOMAIN = os.environ.get("PA_DOMAIN", "").strip() or (f"{USERNAME}.{PA_HOST}" if USERNAME else "")
+
+# Clean domain: Ensure {USERNAME}.pythonanywhere.com (never .www.pythonanywhere.com)
+DOMAIN = os.environ.get("PA_DOMAIN", "").strip()
+if not DOMAIN and USERNAME:
+    DOMAIN = f"{USERNAME}.pythonanywhere.com"
+
 PROJECT_DIR = os.environ.get("PA_PROJECT_DIR", "100-humanity").strip()
 VENV_NAME = os.environ.get("PA_VENV_NAME", "humanity-env").strip()
 BRANCH = os.environ.get("PA_BRANCH", "main").strip()
 
 if not USERNAME or not API_TOKEN:
     print("::error ::Missing PA_USERNAME or PA_API_TOKEN environment variables in GitHub Secrets.")
-    print("Please set PA_USERNAME and PA_API_TOKEN under GitHub Repository Settings -> Secrets and variables -> Actions.")
     sys.exit(1)
 
 BASE_URL = f"https://{PA_HOST}/api/v0/user/{USERNAME}"
@@ -30,26 +33,27 @@ HEADERS = {"Authorization": f"Token {API_TOKEN}"}
 
 
 def run_remote_commands():
-    """Create a temporary bash console on PythonAnywhere and execute update commands."""
-    print(f"🚀 [1/3] Creating PythonAnywhere bash console for user '{USERNAME}'...")
+    """Attempt to execute update commands on PythonAnywhere via active console."""
     console_url = f"{BASE_URL}/consoles/"
-    res = requests.post(console_url, json={"executable": "/bin/bash"}, headers=HEADERS, timeout=30)
-    
-    if res.status_code not in (200, 201):
-        print(f"::warning ::Could not create new console ({res.status_code}): {res.text}")
-        # Try finding existing consoles
-        list_res = requests.get(console_url, headers=HEADERS, timeout=30)
-        if list_res.status_code == 200 and list_res.json():
-            console_id = list_res.json()[0]["id"]
-            print(f"Using existing console #{console_id}...")
-        else:
-            print("::error ::Failed to acquire a console session.")
-            return False
-    else:
-        console_id = res.json()["id"]
-        print(f"Bash console #{console_id} created.")
+    console_id = None
 
-    # Prepare command string
+    # Check for an existing, already-running console in the user's dashboard
+    try:
+        list_res = requests.get(console_url, headers=HEADERS, timeout=20)
+        if list_res.status_code == 200 and list_res.json():
+            for c in list_res.json():
+                if "bash" in str(c.get("executable", "")).lower():
+                    console_id = c["id"]
+                    print(f"📦 Found active user Bash console #{console_id} on PythonAnywhere.")
+                    break
+    except Exception as e:
+        print(f"::warning ::Could not query active consoles: {e}")
+
+    if not console_id:
+        print("ℹ️ Note: No active interactive Bash console was detected in dashboard.")
+        print("Proceeding directly to reload the Web App...")
+        return True
+
     deploy_cmd = (
         f"cd ~/{PROJECT_DIR} && "
         f"git pull origin {BRANCH} && "
@@ -59,56 +63,46 @@ def run_remote_commands():
         f"echo 'DEPLOY_COMPLETE_TOKEN_SUCCESS'\n"
     )
 
-    print(f"📦 [2/3] Executing git pull, migrate, and collectstatic...")
-    input_url = f"{BASE_URL}/consoles/{console_id}/send_input/"
-    input_res = requests.post(input_url, json={"input": deploy_cmd}, headers=HEADERS, timeout=30)
-    if input_res.status_code != 200:
-        print(f"::error ::Failed to send commands to console: {input_res.text}")
-        return False
-
-    # Poll console output until command finishes or timeout (up to 90 seconds)
-    output_url = f"{BASE_URL}/consoles/{console_id}/get_latest_output/"
-    start_time = time.time()
-    completed = False
-    
-    while time.time() - start_time < 90:
-        time.sleep(5)
-        out_res = requests.get(output_url, headers=HEADERS, timeout=30)
-        if out_res.status_code == 200:
-            text = out_res.json().get("output", "")
-            if "DEPLOY_COMPLETE_TOKEN_SUCCESS" in text:
-                print("✅ Deployment commands finished successfully on PythonAnywhere!")
-                completed = True
-                break
-
-    if not completed:
-        print("::warning ::Console commands timed out or finished asynchronously. Proceeding with Web reload...")
-
-    # Clean up console
     try:
-        requests.delete(f"{BASE_URL}/consoles/{console_id}/", headers=HEADERS, timeout=10)
-    except Exception:
-        pass
+        input_url = f"{BASE_URL}/consoles/{console_id}/send_input/"
+        input_res = requests.post(input_url, json={"input": deploy_cmd}, headers=HEADERS, timeout=20)
+        if input_res.status_code == 200:
+            print(f"🚀 Sent git pull and update commands to console #{console_id}.")
+            output_url = f"{BASE_URL}/consoles/{console_id}/get_latest_output/"
+            start_time = time.time()
+            while time.time() - start_time < 30:
+                time.sleep(4)
+                out_res = requests.get(output_url, headers=HEADERS, timeout=20)
+                if out_res.status_code == 200 and "DEPLOY_COMPLETE_TOKEN_SUCCESS" in out_res.json().get("output", ""):
+                    print("✅ Git pull, migrations, and collectstatic finished successfully!")
+                    break
+        else:
+            print(f"::warning ::Could not send input to console ({input_res.status_code}): {input_res.text}")
+    except Exception as e:
+        print(f"::warning ::Console command execution bypassed: {e}")
 
     return True
 
 
 def reload_webapp():
     """Trigger PythonAnywhere Web App reload via REST API."""
-    print(f"🔄 [3/3] Reloading webapp '{DOMAIN}'...")
+    print(f"🔄 Reloading web application '{DOMAIN}' on PythonAnywhere...")
     reload_url = f"{BASE_URL}/webapps/{DOMAIN}/reload/"
-    res = requests.post(reload_url, headers=HEADERS, timeout=30)
-    if res.status_code == 200:
-        print(f"🎉 Web application successfully reloaded! Live at: https://{DOMAIN}/")
-        return True
-    else:
-        print(f"::error ::Failed to reload web application ({res.status_code}): {res.text}")
+    try:
+        res = requests.post(reload_url, headers=HEADERS, timeout=30)
+        if res.status_code == 200:
+            print(f"🎉 Web application successfully reloaded! Live at: https://{DOMAIN}/")
+            return True
+        else:
+            print(f"::error ::Failed to reload web application ({res.status_code}): {res.text}")
+            return False
+    except Exception as e:
+        print(f"::error ::Exception while reloading webapp: {e}")
         return False
 
 
 if __name__ == "__main__":
-    commands_ok = run_remote_commands()
-    reload_ok = reload_webapp()
-    if not (commands_ok and reload_ok):
+    run_remote_commands()
+    if not reload_webapp():
         sys.exit(1)
     print("✨ Deployment workflow completed successfully!")

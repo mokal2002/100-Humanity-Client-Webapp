@@ -136,3 +136,17 @@ class CoreViewsAndSettingsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, "googletagmanager.com/gtag/js?id=G-TEST123456")
         self.assertContains(response, "gtag('config', 'G-TEST123456');")
+
+    def test_google_search_console_verification_meta_renders(self):
+        site = SiteSettings.get_solo()
+        site.google_site_verification = "test-search-console-verification-token-123"
+        site.save()
+
+        response = self.client.get(reverse("core:home"))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, '<meta name="google-site-verification" content="test-search-console-verification-token-123" />')
+
+    def test_google_search_console_token_cleaner_from_full_html_tag(self):
+        site = SiteSettings.get_solo()
+        site.google_site_verification = '<meta name="google-site-verification" content="xyz987token" />'
+        self.assertEqual(site.clean_google_site_verification, "xyz987token")

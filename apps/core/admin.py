@@ -63,11 +63,12 @@ class SiteSettingsAdmin(admin.ModelAdmin):
             },
         ),
         (
-            "SEO, Analytics & Footer",
+            "SEO, Analytics, Search Console & Footer",
             {
                 "fields": (
                     "meta_description",
                     "google_analytics_id",
+                    "google_site_verification",
                     "footer_note",
                 )
             },

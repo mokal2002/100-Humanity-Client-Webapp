@@ -187,6 +187,16 @@ class SiteSettings(models.Model):
             "Leave blank if not using Google Analytics."
         ),
     )
+    google_site_verification = models.CharField(
+        _("Google Search Console Verification Token / Tag"),
+        max_length=150,
+        blank=True,
+        default="",
+        help_text=_(
+            "Paste your Google Search Console verification token or full meta tag "
+            "(e.g. 'abc123xyz' or <meta name='google-site-verification' content='...' />)."
+        ),
+    )
     footer_note = models.CharField(
         _("Footer Note"),
         max_length=255,
@@ -208,6 +218,22 @@ class SiteSettings(models.Model):
     def save(self, *args, **kwargs):
         self.pk = 1
         super().save(*args, **kwargs)
+
+    @property
+    def clean_google_site_verification(self):
+        """Extracts the verification token cleanly if the user pasted the entire HTML tag."""
+        val = (self.google_site_verification or "").strip()
+        if 'content="' in val:
+            try:
+                return val.split('content="')[1].split('"')[0].strip()
+            except Exception:
+                pass
+        if "content='" in val:
+            try:
+                return val.split("content='")[1].split("'")[0].strip()
+            except Exception:
+                pass
+        return val
 
     @property
     def objectives_list(self):

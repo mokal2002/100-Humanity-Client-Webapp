@@ -398,12 +398,16 @@ class EnvironmentSetting(models.Model):
         if self.cloudinary_cloud_name and self.cloudinary_api_key and self.cloudinary_api_secret:
             try:
                 import cloudinary
-                cloudinary.config(
-                    cloud_name=self.cloudinary_cloud_name,
-                    api_key=self.cloudinary_api_key,
-                    api_secret=self.cloudinary_api_secret,
-                    secure=True,
-                )
+                config_params = {
+                    "cloud_name": self.cloudinary_cloud_name,
+                    "api_key": self.cloudinary_api_key,
+                    "api_secret": self.cloudinary_api_secret,
+                    "secure": True,
+                }
+                api_proxy = getattr(settings, "CLOUDINARY_API_PROXY", None)
+                if api_proxy:
+                    config_params["api_proxy"] = api_proxy
+                cloudinary.config(**config_params)
             except Exception:
                 pass
 

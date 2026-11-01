@@ -64,12 +64,16 @@ def upload_image_to_cloudinary(
         import cloudinary.uploader
 
         # Ensure SDK config is synced with current Django settings
-        cloudinary.config(
-            cloud_name=settings.CLOUDINARY_CLOUD_NAME,
-            api_key=settings.CLOUDINARY_API_KEY,
-            api_secret=settings.CLOUDINARY_API_SECRET,
-            secure=True,
-        )
+        config_params = {
+            "cloud_name": settings.CLOUDINARY_CLOUD_NAME,
+            "api_key": settings.CLOUDINARY_API_KEY,
+            "api_secret": settings.CLOUDINARY_API_SECRET,
+            "secure": True,
+        }
+        api_proxy = getattr(settings, "CLOUDINARY_API_PROXY", None)
+        if api_proxy:
+            config_params["api_proxy"] = api_proxy
+        cloudinary.config(**config_params)
 
         base_folder = getattr(settings, "CLOUDINARY_FOLDER", "100_humanity").strip("/")
         target_folder = f"{base_folder}/{subfolder.strip('/')}" if subfolder else base_folder
@@ -134,12 +138,16 @@ def delete_image_from_cloudinary(public_id: str) -> bool:
         import cloudinary
         import cloudinary.uploader
 
-        cloudinary.config(
-            cloud_name=settings.CLOUDINARY_CLOUD_NAME,
-            api_key=settings.CLOUDINARY_API_KEY,
-            api_secret=settings.CLOUDINARY_API_SECRET,
-            secure=True,
-        )
+        config_params = {
+            "cloud_name": settings.CLOUDINARY_CLOUD_NAME,
+            "api_key": settings.CLOUDINARY_API_KEY,
+            "api_secret": settings.CLOUDINARY_API_SECRET,
+            "secure": True,
+        }
+        api_proxy = getattr(settings, "CLOUDINARY_API_PROXY", None)
+        if api_proxy:
+            config_params["api_proxy"] = api_proxy
+        cloudinary.config(**config_params)
         result = cloudinary.uploader.destroy(public_id, invalidate=True, resource_type="image")
         return result.get("result") in ("ok", "not found")
     except Exception as exc:

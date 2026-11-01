@@ -193,6 +193,13 @@ CLOUDINARY_API_KEY = os.environ.get("CLOUDINARY_API_KEY", "").strip()
 CLOUDINARY_API_SECRET = os.environ.get("CLOUDINARY_API_SECRET", "").strip()
 CLOUDINARY_FOLDER = os.environ.get("CLOUDINARY_FOLDER", "100_humanity").strip()
 
+# PythonAnywhere Free Tier outbound HTTP proxy configuration
+# On PythonAnywhere free accounts, outbound HTTPS connections must route through http://proxy.server:3128
+PYTHONANYWHERE_HOST = os.environ.get("PYTHONANYWHERE_SITE", "") or os.environ.get("PYTHONANYWHERE_DOMAIN", "")
+CLOUDINARY_API_PROXY = os.environ.get("CLOUDINARY_API_PROXY", "").strip()
+if not CLOUDINARY_API_PROXY and (PYTHONANYWHERE_HOST or "pythonanywhere" in os.environ.get("ALLOWED_HOSTS", "")):
+    CLOUDINARY_API_PROXY = "http://proxy.server:3128"
+
 CLOUDINARY_CONFIGURED = bool(
     CLOUDINARY_CLOUD_NAME and CLOUDINARY_API_KEY and CLOUDINARY_API_SECRET
 )
@@ -200,12 +207,15 @@ CLOUDINARY_CONFIGURED = bool(
 if CLOUDINARY_CONFIGURED:
     try:
         import cloudinary
-        cloudinary.config(
-            cloud_name=CLOUDINARY_CLOUD_NAME,
-            api_key=CLOUDINARY_API_KEY,
-            api_secret=CLOUDINARY_API_SECRET,
-            secure=True,
-        )
+        config_params = {
+            "cloud_name": CLOUDINARY_CLOUD_NAME,
+            "api_key": CLOUDINARY_API_KEY,
+            "api_secret": CLOUDINARY_API_SECRET,
+            "secure": True,
+        }
+        if CLOUDINARY_API_PROXY:
+            config_params["api_proxy"] = CLOUDINARY_API_PROXY
+        cloudinary.config(**config_params)
     except ImportError:
         CLOUDINARY_CONFIGURED = False
 

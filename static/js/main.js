@@ -263,6 +263,9 @@ window.toggleBackgroundMusic = function () {
       }
     }).catch((err) => {
       console.warn("Audio playback blocked by browser:", err);
+      if (typeof window.showToast === "function") {
+        window.showToast("Cannot play audio. Please check file format or volume.", "warning");
+      }
     });
   } else {
     audio.pause();
@@ -288,6 +291,15 @@ window.initBackgroundMusic = function () {
   const slider = document.getElementById("music-volume-slider");
   const volLabel = document.getElementById("music-volume-label");
   if (!audio || !widget) return;
+
+  // Audio Error Detection (e.g. 404 or corrupt file)
+  audio.addEventListener("error", function (e) {
+    console.error("Audio error event:", e, audio.error);
+    widget.classList.add("music-paused");
+    widget.classList.remove("music-playing");
+    if (btnLabel) btnLabel.textContent = "Error";
+    if (statusText) statusText.textContent = "Audio File Unavailable";
+  });
 
   // Initialize Volume
   const rawVol = localStorage.getItem("100_humanity_music_vol");

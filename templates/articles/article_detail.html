@@ -6,45 +6,46 @@
 {% block og_type %}article{% endblock %}
 
 {% block content %}
-<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
+<div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-8">
   <div>
-    <a href="{% url 'articles:article_list' %}" class="text-xs font-bold text-[#1B365D] hover:text-[#C87D20]">
-      &larr; {% trans "Back to All Articles" %}
+    <a href="{% url 'articles:article_list' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-white transition">
+      <span>&larr;</span>
+      <span>{% trans "Back to All Articles" %}</span>
     </a>
   </div>
 
-  <article class="bg-white rounded-3xl overflow-hidden border border-[#E6DEC8] shadow-sm">
+  <article class="bg-slate-900/75 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
     {% if article.cover_image_url %}
-      <div class="h-64 sm:h-80 bg-slate-200 overflow-hidden">
+      <div class="h-64 sm:h-96 bg-slate-950 overflow-hidden">
         <img src="{{ article.cover_image_url }}" alt="{{ article.title }}" class="w-full h-full object-cover" />
       </div>
     {% endif %}
 
-    <div class="p-8 sm:p-10 space-y-6">
+    <div class="p-8 sm:p-12 space-y-8">
       <div>
-        <div class="flex flex-wrap items-center gap-2 text-xs mb-2">
+        <div class="flex flex-wrap items-center gap-2 text-xs mb-3">
           {% if article.category %}
-            <span class="px-2.5 py-0.5 rounded-full bg-amber-100 text-[#1B365D] font-bold">{{ article.category.name }}</span>
+            <span class="px-3 py-1 rounded-full bg-cyan-950 text-cyan-300 font-bold border border-cyan-500/30">{{ article.category.name }}</span>
           {% endif %}
           <span class="text-slate-400">• {% trans "Published" %} {{ article.published_at|date:"F j, Y" }}</span>
         </div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-[#1B365D] font-heading">{{ article.title }}</h1>
-        <p class="text-xs text-slate-500 mt-1">{% trans "Written by" %} <strong class="text-[#1B365D]">{{ article.author_name }}</strong></p>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white font-heading leading-tight">{{ article.title }}</h1>
+        <p class="text-xs text-slate-400 mt-2">{% trans "Written by" %} <strong class="text-white">{{ article.author_name }}</strong></p>
       </div>
 
-      <div class="p-4 rounded-2xl bg-[#FAF7F0] border-l-4 border-[#D49B38] text-sm text-slate-700 font-medium leading-relaxed">
+      <div class="p-5 sm:p-6 rounded-2xl bg-blue-950/60 border-l-4 border-cyan-400 text-sm sm:text-base text-cyan-100 font-medium leading-relaxed">
         {{ article.summary }}
       </div>
 
-      <div class="prose max-w-none text-slate-700 leading-relaxed text-sm sm:text-base space-y-3">
+      <div class="prose max-w-none text-slate-300 leading-relaxed text-sm sm:text-base space-y-4">
         {{ article.content|linebreaks }}
       </div>
 
       {% if article.tag_list %}
-        <div class="pt-4 border-t border-slate-100 flex flex-wrap items-center gap-2">
-          <strong class="text-xs text-slate-700 uppercase">{% trans "Topics:" %}</strong>
+        <div class="pt-6 border-t border-white/10 flex flex-wrap items-center gap-2">
+          <strong class="text-xs text-slate-400 uppercase tracking-wider">{% trans "Topics:" %}</strong>
           {% for tag in article.tag_list %}
-            <a href="{% url 'articles:article_list' %}?tag={{ tag|urlencode }}" class="px-2.5 py-1 rounded-lg bg-slate-100 text-[#1B365D] text-xs font-semibold hover:bg-amber-100 transition">
+            <a href="{% url 'articles:article_list' %}?tag={{ tag|urlencode }}" class="px-3 py-1 rounded-lg bg-slate-950 text-slate-300 text-xs font-semibold hover:bg-white/10 hover:text-white transition">
               {{ tag }}
             </a>
           {% endfor %}
@@ -55,18 +56,18 @@
 
   {% if related_articles %}
     <div class="space-y-4 pt-6">
-      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Related Educational Articles" %}</h2>
+      <h2 class="text-xl font-bold text-white font-heading">{% trans "Related Educational Articles" %}</h2>
       <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
         {% for rel in related_articles %}
-          <article class="bg-white rounded-2xl p-6 border border-[#E6DEC8] shadow-sm flex flex-col justify-between">
+          <article class="bg-slate-900/70 backdrop-blur-xl rounded-2xl p-6 border border-white/10 shadow-lg hover:border-cyan-400/40 transition flex flex-col justify-between">
             <div>
-              <h3 class="text-base font-bold text-[#1B365D] font-heading mb-2">
-                <a href="{{ rel.get_absolute_url }}" class="hover:text-[#C87D20]">{{ rel.title }}</a>
+              <h3 class="text-base font-bold text-white font-heading mb-2">
+                <a href="{{ rel.get_absolute_url }}" class="hover:text-cyan-400 transition">{{ rel.title }}</a>
               </h3>
-              <p class="text-xs text-slate-600 line-clamp-3 leading-relaxed">{{ rel.summary|truncatewords:16 }}</p>
+              <p class="text-xs text-slate-400 line-clamp-3 leading-relaxed">{{ rel.summary|truncatewords:16 }}</p>
             </div>
-            <div class="pt-3 mt-3 border-t border-slate-100">
-              <a href="{{ rel.get_absolute_url }}" class="text-xs font-bold text-[#1B365D] hover:underline">{% trans "Read" %} &rarr;</a>
+            <div class="pt-3 mt-3 border-t border-white/10">
+              <a href="{{ rel.get_absolute_url }}" class="text-xs font-bold text-cyan-400 hover:underline">{% trans "Read Article" %} &rarr;</a>
             </div>
           </article>
         {% endfor %}

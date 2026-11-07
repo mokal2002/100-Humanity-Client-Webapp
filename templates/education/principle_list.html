@@ -1,70 +1,86 @@
 {% extends "base.html" %}
 {% load i18n static %}
 
-{% block title %}{% trans "Dhamma Education — 15 Principles for Good Dhamma Teachers" %} — {{ site_settings.site_name }}{% endblock %}
+{% block title %}{% trans "15 Principles for Developing Good Dhamma Teachers" %} — {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-  <!-- Header Banner -->
-  <div class="bg-[#1B365D] text-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border-b-4 border-[#D49B38] shadow-md">
-    <span class="text-xs font-bold uppercase tracking-wider text-amber-300">{% trans "Buddha Dhamma Education Curriculum" %}</span>
-    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold font-heading mt-1 text-white">{% trans "15 Principles for Developing Good Dhamma Teachers" %}</h1>
-    <p class="text-xs sm:text-base text-slate-200 mt-2 max-w-3xl leading-relaxed">
-      {% trans "Sharing Buddha Dhamma requires clarity of understanding, ethical integrity, regular meditation, scientific temperament, and deep compassion. These 15 foundational principles guide teachers and learners at 100% HUMANITY." %}
-    </p>
-  </div>
-
-  <!-- Search and Filter Bar -->
-  <div class="bg-white rounded-2xl p-4 sm:p-5 border border-[#E6DEC8] shadow-sm flex flex-col sm:flex-row gap-3 sm:gap-4 items-stretch sm:items-center justify-between">
-    <div class="w-full md:w-80">
-      <input id="principle-search-input" type="search" placeholder="{% trans 'Search 15 principles (e.g. Meditation, Equality)...' %}" class="w-full px-4 py-2.5 rounded-xl border border-[#E6DEC8] text-sm focus:outline-none focus:border-[#1B365D]" onkeyup="filterPrinciples()" />
-    </div>
-    <div class="text-xs text-slate-500 font-medium">
-      {% blocktrans count counter=principles|length %}{{ counter }} principle published{% plural %}{{ counter }} principles published{% endblocktrans %}
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-14 space-y-10">
+  
+  <!-- Architectural Hero Banner -->
+  <div class="rounded-3xl bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 text-white p-8 sm:p-12 lg:p-14 shadow-2xl relative overflow-hidden border border-white/15">
+    <div class="absolute -top-20 -right-20 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="max-w-3xl space-y-4 relative z-10">
+      <span class="px-3.5 py-1 rounded-full bg-blue-500/20 text-cyan-300 text-xs font-bold uppercase tracking-widest border border-blue-400/30">{% trans "Structured Curriculum" %}</span>
+      <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight leading-tight">
+        {% trans "15 Principles for Developing Good Dhamma Teachers" %}
+      </h1>
+      <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">
+        {% trans "Sharing Buddha Dhamma requires clarity of understanding, ethical integrity, regular meditation, scientific temperament, and deep compassion. These 15 foundational principles guide teachers and learners at 100% HUMANITY." %}
+      </p>
     </div>
   </div>
 
+  <!-- Realtime Filter Bar -->
+  <div class="bg-slate-900/70 backdrop-blur-xl rounded-2xl p-4 sm:p-5 border border-white/10 shadow-lg flex flex-col sm:flex-row gap-4 items-stretch sm:items-center justify-between">
+    <div class="relative flex-1 max-w-md">
+      <input id="principle-search-input" type="search" placeholder="{% trans 'Search by keyword (e.g. Meditation, Character, Equality)...' %}" class="w-full pl-10 pr-4 py-2.5 rounded-xl bg-slate-950 border border-white/15 text-white placeholder-slate-400 text-sm focus:outline-none focus:ring-2 focus:ring-cyan-500/30 focus:border-cyan-500 transition" onkeyup="filterPrinciples()" />
+      <span class="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm">🔍</span>
+    </div>
+    <div class="text-xs font-semibold text-slate-300 flex items-center gap-2">
+      <span class="w-2 h-2 rounded-full bg-cyan-400 animate-pulse"></span>
+      {% blocktrans count counter=principles|length %}{{ counter }} Principle Published{% plural %}{{ counter }} Principles Published{% endblocktrans %}
+    </div>
+  </div>
+
+  <!-- Responsive Principles Cards Grid -->
   {% if principles %}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="principles-grid">
       {% for principle in principles %}
-        <article id="principle-{{ principle.principle_number }}" class="principle-card bg-white rounded-2xl p-6 border border-[#E6DEC8] shadow-sm hover:shadow-md transition flex flex-col justify-between" data-title="{{ principle.title|lower }}" data-summary="{{ principle.summary|lower }}" data-number="{{ principle.principle_number }}">
-          <div>
-            <div class="flex items-center justify-between gap-2 mb-3">
-              <span class="w-10 h-10 rounded-xl bg-[#1B365D] text-[#D49B38] font-bold text-sm flex items-center justify-center shadow-sm">#{{ principle.principle_number }}</span>
-              <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-amber-50 text-[#1B365D] border border-amber-200">{% trans "Principle" %} {{ principle.principle_number }}</span>
+        <article id="principle-{{ principle.principle_number }}" class="principle-card bg-slate-900/65 backdrop-blur-xl rounded-3xl p-7 border border-white/10 hover:border-cyan-400/40 shadow-xl hover:shadow-cyan-500/10 transition-all duration-300 flex flex-col justify-between group" data-title="{{ principle.title|lower }}" data-summary="{{ principle.summary|lower }}" data-number="{{ principle.principle_number }}">
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <span class="w-11 h-11 rounded-2xl bg-gradient-to-br from-blue-600 via-indigo-600 to-cyan-500 text-white font-extrabold text-base flex items-center justify-center shadow-lg shadow-blue-500/30 group-hover:scale-105 transition-transform">
+                #{{ principle.principle_number }}
+              </span>
+              <span class="text-xs font-semibold px-3 py-1 rounded-full bg-white/10 text-cyan-300 border border-white/15">
+                {% trans "Principle" %} {{ principle.principle_number }}
+              </span>
             </div>
-            <h2 class="text-lg font-bold text-[#1B365D] font-heading mb-2">{{ principle.title }}</h2>
-            <p class="text-sm font-medium text-[#C87D20] mb-3">{{ principle.summary }}</p>
-            <p class="text-sm text-slate-700 leading-relaxed mb-4">{{ principle.detailed_explanation }}</p>
+            <h2 class="text-lg font-bold text-white font-heading group-hover:text-cyan-400 transition-colors leading-snug">{{ principle.title }}</h2>
+            <p class="text-xs font-semibold text-cyan-200 bg-cyan-950/60 p-3 rounded-2xl border border-cyan-500/25 leading-relaxed">{{ principle.summary }}</p>
+            <p class="text-sm text-slate-300 leading-relaxed">{{ principle.detailed_explanation }}</p>
 
             {% if principle.practical_guidance %}
-              <div class="p-3.5 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8] mb-3">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-[#1B365D] mb-1">{% trans "Practical Application:" %}</h3>
-                <p class="text-xs text-slate-700 leading-relaxed">{{ principle.practical_guidance }}</p>
+              <div class="p-4 rounded-2xl bg-slate-950/80 border border-white/10 space-y-1">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-cyan-400 block">{% trans "Practical Application:" %}</span>
+                <p class="text-xs text-slate-300 leading-relaxed">{{ principle.practical_guidance }}</p>
               </div>
             {% endif %}
 
             {% if principle.learning_resources %}
-              <div class="p-3.5 rounded-xl bg-slate-50 border border-slate-200">
-                <h3 class="text-xs font-bold uppercase tracking-wider text-slate-600 mb-1">{% trans "Study & Learning Focus:" %}</h3>
-                <p class="text-xs text-slate-600 leading-relaxed">{{ principle.learning_resources }}</p>
+              <div class="p-3.5 rounded-2xl bg-slate-950/60 border border-white/10 space-y-1">
+                <span class="text-[11px] font-bold uppercase tracking-wider text-blue-300 block">{% trans "Study Focus:" %}</span>
+                <p class="text-xs text-slate-400 leading-relaxed">{{ principle.learning_resources }}</p>
               </div>
             {% endif %}
           </div>
-          <div class="pt-4 mt-4 border-t border-slate-100 flex items-center justify-between">
-            <button type="button" onclick="openStudyNote('{{ principle.principle_number }}', '{{ principle.title|escapejs }}', '{{ principle.summary|escapejs }}', '{{ principle.detailed_explanation|escapejs }}', '{{ principle.practical_guidance|escapejs }}', '{{ principle.learning_resources|escapejs }}')" class="text-xs font-bold text-[#1B365D] hover:text-[#C87D20]">
-              {% trans "View in Focus Modal" %} &rarr;
+
+          <div class="pt-5 mt-6 border-t border-white/10 flex items-center justify-between">
+            <button type="button" onclick="openStudyNote('{{ principle.principle_number }}', '{{ principle.title|escapejs }}', '{{ principle.summary|escapejs }}', '{{ principle.detailed_explanation|escapejs }}', '{{ principle.practical_guidance|escapejs }}', '{{ principle.learning_resources|escapejs }}')" class="text-xs font-bold text-cyan-400 hover:text-white inline-flex items-center gap-1 transition">
+              <span>{% trans "Focus Modal" %}</span>
+              <span>&rarr;</span>
             </button>
+            <span class="text-[11px] text-slate-500 font-medium">100% Humanity</span>
           </div>
         </article>
       {% endfor %}
     </div>
   {% else %}
-    <div class="bg-white rounded-2xl p-10 text-center border border-[#E6DEC8] text-slate-600">
-      <h2 class="text-lg font-bold text-[#1B365D]">{% trans "No Principles Published Yet" %}</h2>
-      <p class="text-sm mt-1">{% trans "Administrators can manage and publish the 15 Dhamma Education principles from the Admin Dashboard." %}</p>
+    <div class="bg-slate-900/70 rounded-3xl p-12 text-center border border-white/10 text-slate-400">
+      <p class="text-base font-semibold">{% trans "Principles will be published here once available." %}</p>
     </div>
   {% endif %}
+
 </div>
 
 <script>
@@ -99,18 +115,18 @@
     titleEl.textContent = 'Principle #' + num + ': ' + title;
     bodyEl.innerHTML = 
       '<div class="space-y-4">' +
-        '<div class="p-4 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8]">' +
-          '<h4 class="text-xs font-bold uppercase tracking-wider text-[#1B365D] mb-1">Core Summary</h4>' +
-          '<p class="text-slate-800 font-medium text-sm">' + escapeHtml(summary) + '</p>' +
+        '<div class="p-4 rounded-2xl bg-blue-950/80 border border-blue-500/30 text-white">' +
+          '<h4 class="text-xs font-bold uppercase tracking-wider text-cyan-300 mb-1">Core Principle</h4>' +
+          '<p class="text-white font-medium text-sm">' + escapeHtml(summary) + '</p>' +
         '</div>' +
         '<div>' +
-          '<h4 class="text-sm font-bold text-[#1B365D] mb-1.5">Educational Explanation</h4>' +
-          '<p class="text-sm text-slate-700 leading-relaxed">' + escapeHtml(explanation) + '</p>' +
+          '<h4 class="text-xs font-bold text-slate-300 uppercase tracking-wider mb-1">Detailed Explanation</h4>' +
+          '<p class="text-slate-300 leading-relaxed text-sm">' + escapeHtml(explanation) + '</p>' +
         '</div>' +
-        (practical ? '<div><h4 class="text-sm font-bold text-[#1B365D] mb-1">Practical Application</h4><p class="text-sm text-slate-700 leading-relaxed">' + escapeHtml(practical) + '</p></div>' : '') +
-        (resources ? '<div><h4 class="text-sm font-bold text-[#1B365D] mb-1">Study Focus</h4><p class="text-sm text-slate-700 leading-relaxed">' + escapeHtml(resources) + '</p></div>' : '') +
-        '<div class="pt-3 border-t border-slate-200 flex justify-end">' +
-          '<button type="button" onclick="closeGenericModal()" class="px-4 py-2 rounded-xl bg-[#1B365D] text-white text-xs font-semibold">Done Reading</button>' +
+        (practical ? '<div class="p-4 rounded-2xl bg-slate-900 border border-white/10"><h4 class="text-xs font-bold text-cyan-300 uppercase tracking-wider mb-1">Practical Application</h4><p class="text-slate-300 leading-relaxed text-sm">' + escapeHtml(practical) + '</p></div>' : '') +
+        (resources ? '<div><h4 class="text-xs font-bold text-cyan-300 uppercase tracking-wider mb-1">Study Focus</h4><p class="text-slate-300 leading-relaxed text-sm">' + escapeHtml(resources) + '</p></div>' : '') +
+        '<div class="pt-4 border-t border-white/10 flex justify-end">' +
+          '<button type="button" onclick="closeGenericModal()" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 text-white font-bold text-xs shadow-md">Done</button>' +
         '</div>' +
       '</div>';
     modal.classList.remove('hidden');

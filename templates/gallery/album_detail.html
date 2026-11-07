@@ -4,47 +4,48 @@
 {% block title %}{{ album.title }} — {% trans "Photo Gallery" %} — {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10 sm:py-14 space-y-6 sm:space-y-8">
   <div>
-    <a href="{% url 'gallery:album_list' %}" class="text-xs font-bold text-[#1B365D] hover:text-[#C87D20]">
-      &larr; {% trans "Back to All Albums" %}
+    <a href="{% url 'gallery:album_list' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-white transition">
+      <span>&larr;</span>
+      <span>{% trans "Back to All Albums" %}</span>
     </a>
   </div>
 
-  <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-[#E6DEC8] shadow-sm flex flex-col md:flex-row md:items-center justify-between gap-4 sm:gap-6">
-    <div class="space-y-2">
-      <span class="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-amber-100 text-[#1B365D]">{{ album.category }}</span>
-      <h1 class="text-2xl sm:text-3xl font-bold text-[#1B365D] font-heading">{{ album.title }}</h1>
+  <div class="bg-slate-900/75 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-white/10 shadow-2xl flex flex-col md:flex-row md:items-center justify-between gap-6">
+    <div class="space-y-2 sm:space-y-3">
+      <span class="px-3 py-1 rounded-full text-[11px] sm:text-xs font-bold bg-cyan-950 text-cyan-300 border border-cyan-500/30">{{ album.category }}</span>
+      <h1 class="text-xl sm:text-3xl font-extrabold text-white font-heading">{{ album.title }}</h1>
       {% if album.description %}
-        <p class="text-sm text-slate-600 max-w-3xl leading-relaxed">{{ album.description }}</p>
+        <p class="text-xs sm:text-sm text-slate-300 max-w-3xl leading-relaxed">{{ album.description }}</p>
       {% endif %}
     </div>
     {% if user.is_staff %}
-      <a href="{% url 'gallery:bulk_upload' %}?album={{ album.pk }}" class="px-4 py-2.5 rounded-xl bg-[#1B365D] hover:bg-[#0F2544] text-white text-xs font-semibold shadow-sm transition whitespace-nowrap self-start md:self-auto">
+      <a href="{% url 'gallery:bulk_upload' %}?album={{ album.pk }}" class="px-4 py-2 sm:px-5 sm:py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold shadow-lg shadow-blue-500/30 transition whitespace-nowrap self-start md:self-auto">
         {% trans "+ Add Photos to Album" %}
       </a>
     {% endif %}
   </div>
 
   {% if page_obj and page_obj.object_list %}
-    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-3 sm:gap-4">
+    <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4">
       {% for photo in page_obj %}
-        <div class="bg-white rounded-xl overflow-hidden border border-[#E6DEC8] shadow-sm group">
-          <div class="relative h-44 sm:h-48 bg-slate-100 overflow-hidden cursor-pointer" onclick="openSingleLightbox('{{ photo.image_url }}', '{{ photo.title|escapejs }}', '{{ album.title|escapejs }}')">
+        <div class="bg-slate-900/70 backdrop-blur-xl rounded-2xl overflow-hidden border border-white/10 shadow-lg hover:border-cyan-400/40 transition group">
+          <div class="relative h-32 sm:h-48 bg-slate-950 overflow-hidden cursor-pointer" onclick="openSingleLightbox('{{ photo.image_url }}', '{{ photo.title|escapejs }}', '{{ album.title|escapejs }}')">
             <img src="{{ photo.image_url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-2.5 text-white">
-              <span class="text-xs font-medium">🔍 {% trans "View Full Size" %}</span>
+            <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-2.5 sm:p-3 text-white">
+              <span class="text-[10px] sm:text-xs font-medium">🔍 {% trans "View Full Size" %}</span>
             </div>
           </div>
-          <div class="p-3.5 space-y-2">
-            <h4 class="font-bold text-xs text-[#1B365D] line-clamp-1">{{ photo.title }}</h4>
+          <div class="p-3 sm:p-4 space-y-1 sm:space-y-1.5">
+            <h4 class="font-bold text-[11px] sm:text-xs text-white truncate">{{ photo.title }}</h4>
             {% if photo.caption %}
-              <p class="text-[11px] text-slate-600 line-clamp-2 leading-relaxed">{{ photo.caption }}</p>
+              <p class="text-[10px] sm:text-[11px] text-slate-400 line-clamp-2 leading-relaxed">{{ photo.caption }}</p>
             {% endif %}
             {% if user.is_staff %}
-              <form method="post" action="{% url 'gallery:delete_image' photo.pk %}" class="js-confirm-delete pt-2 border-t border-slate-100" data-confirm-message="Are you sure you want to permanently delete '{{ photo.title }}' from this album and Cloudinary?">
+              <form method="post" action="{% url 'gallery:delete_image' photo.pk %}" class="js-confirm-delete pt-2 border-t border-white/10" data-confirm-message="Are you sure you want to permanently delete '{{ photo.title }}' from this album and Cloudinary?">
                 {% csrf_token %}
-                <button type="submit" class="text-[11px] text-red-600 font-semibold hover:underline">{% trans "Delete Photo" %}</button>
+                <button type="submit" class="text-[10px] sm:text-[11px] text-rose-400 hover:text-rose-300 font-semibold hover:underline">{% trans "Delete Photo" %}</button>
               </form>
             {% endif %}
           </div>
@@ -54,10 +55,10 @@
 
     {% include "components/pagination.html" %}
   {% else %}
-    <div class="bg-white rounded-2xl p-10 text-center border border-[#E6DEC8] text-slate-600">
-      <h2 class="text-lg font-bold text-[#1B365D]">{% trans "This Album Has No Photographs Yet" %}</h2>
+    <div class="bg-slate-900/70 backdrop-blur-xl rounded-3xl p-10 text-center border border-white/10 text-slate-400">
+      <h2 class="text-base sm:text-lg font-bold text-white">{% trans "This Album Has No Photographs Yet" %}</h2>
       {% if user.is_staff %}
-        <a href="{% url 'gallery:bulk_upload' %}?album={{ album.pk }}" class="mt-3 inline-block px-4 py-2 rounded-xl bg-[#1B365D] text-white text-xs font-semibold">{% trans "Upload Photos Now" %}</a>
+        <a href="{% url 'gallery:bulk_upload' %}?album={{ album.pk }}" class="mt-4 inline-block px-5 py-2.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-bold shadow-md">{% trans "Upload Photos Now" %}</a>
       {% endif %}
     </div>
   {% endif %}
@@ -68,14 +69,12 @@
     var modal = document.getElementById('lightbox-modal');
     var imgEl = document.getElementById('lightbox-image');
     var albumEl = document.getElementById('lightbox-album-title');
-    var counterEl = document.getElementById('lightbox-counter');
     var capEl = document.getElementById('lightbox-caption');
     if (!modal || !imgEl) return;
 
     imgEl.src = imgUrl;
     imgEl.alt = caption;
     if (albumEl) albumEl.textContent = albumTitle || 'Photo Gallery';
-    if (counterEl) counterEl.textContent = '';
     if (capEl) capEl.textContent = caption || '';
     modal.classList.remove('hidden');
   }

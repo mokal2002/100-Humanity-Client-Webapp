@@ -2,25 +2,23 @@
 <html lang="{{ LANGUAGE_CODE|default:'en' }}" class="scroll-smooth">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>{% block title %}{{ site_settings.site_name }} — Buddha Dhamma, Equality, Compassion &amp; Rational Inquiry{% endblock %}</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+  <title>{% block title %}{{ site_settings.site_name }} — Buddha Dhamma, Equality &amp; Rational Inquiry{% endblock %}</title>
   <meta name="description" content="{% block meta_description %}{{ site_settings.meta_description }}{% endblock %}" />
   <link rel="canonical" href="{{ request.build_absolute_uri }}" />
 
-  <!-- Open Graph Metadata -->
+  <!-- Open Graph -->
   <meta property="og:site_name" content="{{ site_settings.site_name }}" />
-  <meta property="og:title" content="{% block og_title %}{{ site_settings.site_name }} — Buddha Dhamma &amp; Human Equality{% endblock %}" />
+  <meta property="og:title" content="{% block og_title %}{{ site_settings.site_name }} — Buddha Dhamma &amp; Equality{% endblock %}" />
   <meta property="og:description" content="{% block og_description %}{{ site_settings.meta_description }}{% endblock %}" />
   <meta property="og:type" content="{% block og_type %}website{% endblock %}" />
   <meta property="og:url" content="{{ request.build_absolute_uri }}" />
 
   {% if site_settings.clean_google_site_verification %}
-  <!-- Google Search Console Ownership Verification -->
   <meta name="google-site-verification" content="{{ site_settings.clean_google_site_verification }}" />
   {% endif %}
 
   {% if site_settings.google_analytics_id %}
-  <!-- Google Analytics 4 (gtag.js) -->
   <script async src="https://www.googletagmanager.com/gtag/js?id={{ site_settings.google_analytics_id }}"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -30,58 +28,94 @@
   </script>
   {% endif %}
 
-  <!-- Google Fonts: Poppins (Latin + Devanagari) & Noto Sans Devanagari for Marathi and Hindi -->
+  <!-- Modern Premium Typography: Outfit (Display & Headings), Plus Jakarta Sans, Inter (Body), Noto Sans Devanagari (Multilingual) -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,300;0,400;0,500;0,600;0,700;0,800;1,400;1,600&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800;900&family=Plus+Jakarta+Sans:wght@500;600;700;800&family=Noto+Sans+Devanagari:wght@400;500;600;700&display=swap" rel="stylesheet" />
 
-  <!-- Tailwind CSS CDN with Custom Palette Configuration -->
+  <!-- Tailwind CSS CDN -->
+  <script>
+    /* Suppress Tailwind CDN production notice in console */
+    (function(){
+      var _w = console.warn;
+      console.warn = function(){
+        if (arguments[0] && typeof arguments[0] === 'string' && arguments[0].indexOf('cdn.tailwindcss.com') !== -1) return;
+        _w.apply(console, arguments);
+      };
+    })();
+  </script>
   <script src="https://cdn.tailwindcss.com"></script>
   <script>
     tailwind.config = {
       theme: {
         extend: {
           colors: {
-            dhamma: {
-              navy: '#1B365D',
-              darknavy: '#0F2544',
-              gold: '#D49B38',
-              saffron: '#C87D20',
-              ivory: '#FAF7F0',
-              sand: '#F3EDE0',
-              border: '#E6DEC8'
+            brand: {
+              50: '#F0F7FF',
+              100: '#E0EFFF',
+              200: '#B9DDFF',
+              300: '#7CC2FF',
+              400: '#36A2FF',
+              500: '#0C87F8',
+              600: '#006BD6',
+              700: '#0054AB',
+              800: '#04478D',
+              900: '#0A3B73',
+              950: '#06254D'
             }
           },
           fontFamily: {
-            sans: ['Poppins', 'Noto Sans Devanagari', 'system-ui', '-apple-system', 'sans-serif'],
-            heading: ['Poppins', 'Noto Sans Devanagari', 'system-ui', '-apple-system', 'sans-serif'],
+            sans: ['Inter', 'Noto Sans Devanagari', 'system-ui', '-apple-system', 'sans-serif'],
+            heading: ['Outfit', 'Plus Jakarta Sans', 'Noto Sans Devanagari', 'sans-serif'],
+            display: ['Outfit', 'Noto Sans Devanagari', 'sans-serif'],
+            body: ['Inter', 'Noto Sans Devanagari', 'sans-serif']
           }
         }
       }
     }
   </script>
 
-  <!-- Favicon & Stylesheet -->
   <link rel="icon" type="image/svg+xml" href="{% static 'images/logo.svg' %}" />
   <link rel="stylesheet" href="{% static 'css/style.css' %}" />
 
   <style>
-    body {
-      font-family: 'Inter', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
-      background-color: #FAF7F0;
-      color: #1E293B;
+    :root {
+      --font-body: 'Inter', 'Noto Sans Devanagari', system-ui, -apple-system, sans-serif;
+      --font-heading: 'Outfit', 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+      --font-display: 'Outfit', 'Plus Jakarta Sans', 'Noto Sans Devanagari', sans-serif;
+    }
+    html, body {
+      font-family: var(--font-body);
       overflow-x: hidden;
+      width: 100%;
+      min-height: 100%;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+      letter-spacing: -0.01em;
     }
-    .font-heading {
-      font-family: 'Merriweather', 'Noto Sans Devanagari', Georgia, serif;
+    body {
+      background: linear-gradient(180deg, #030712 0%, #07142E 25%, #0B1D40 50%, #071530 75%, #020617 100%);
+      color: #F8FAFC;
     }
-    :focus-visible {
-      outline: 3px solid #C87D20;
-      outline-offset: 2px;
+    h1, h2, h3, h4, h5, h6, .font-heading {
+      font-family: var(--font-heading);
+      letter-spacing: -0.028em;
     }
-    .dharma-pattern {
-      background-image: radial-gradient(rgba(212, 155, 56, 0.14) 1px, transparent 1px);
-      background-size: 24px 24px;
+    /* Ambient gradient glow utilities */
+    .glow-cyan {
+      box-shadow: 0 0 50px -10px rgba(6, 182, 212, 0.3);
+    }
+    .glow-blue {
+      box-shadow: 0 0 50px -10px rgba(37, 99, 235, 0.3);
+    }
+    .frosted-glass {
+      background: rgba(15, 23, 42, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+    }
+    .frosted-glass:hover {
+      border-color: rgba(56, 189, 248, 0.35);
     }
     @media (prefers-reduced-motion: reduce) {
       *, ::before, ::after {
@@ -95,18 +129,18 @@
 
   {% block extra_head %}{% endblock %}
 </head>
-<body class="min-h-screen flex flex-col bg-[#FAF7F0] text-slate-800 antialiased selection:bg-[#1B365D] selection:text-white">
+<body class="min-h-screen flex flex-col antialiased selection:bg-blue-600 selection:text-white">
 
-  <!-- Skip to Main Content Accessibility Link -->
-  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-[#1B365D] focus:text-white focus:px-4 focus:py-2 focus:rounded-lg focus:shadow-lg">
+  <!-- Skip Link -->
+  <a href="#main-content" class="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-3 focus:z-50 focus:bg-gradient-to-r focus:from-blue-600 focus:to-cyan-600 focus:text-white focus:px-4 focus:py-2.5 focus:rounded-xl focus:shadow-2xl">
     {% trans "Skip to main content" %}
   </a>
 
-  <!-- Top Announcement & Navbar -->
+  <!-- Header Navigation -->
   {% include "components/navbar.html" %}
 
-  <!-- Main Content Container -->
-  <main id="main-content" class="flex-1" tabindex="-1">
+  <!-- Main Content -->
+  <main id="main-content" class="flex-1 w-full" tabindex="-1">
     {% include "components/messages.html" %}
     {% block content %}{% endblock %}
   </main>
@@ -114,52 +148,51 @@
   <!-- Global Footer -->
   {% include "components/footer.html" %}
 
-  <!-- Global Photo Lightbox Modal (Accessible Keyboard & Click Navigation) -->
+  <!-- Photo Lightbox Modal -->
   <div id="lightbox-modal" class="fixed inset-0 z-50 hidden bg-slate-950/95 backdrop-blur-md flex flex-col justify-between p-4 sm:p-6" role="dialog" aria-modal="true" aria-label="{% trans 'Photograph Lightbox' %}">
     <div class="flex items-center justify-between text-white max-w-6xl w-full mx-auto">
       <div>
-        <span id="lightbox-album-title" class="text-sm font-semibold text-amber-300 block"></span>
+        <span id="lightbox-album-title" class="text-sm font-semibold text-cyan-300 block"></span>
         <span id="lightbox-counter" class="text-xs text-slate-400"></span>
       </div>
-      <button type="button" onclick="closeLightbox()" class="px-3 py-1.5 rounded-lg bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition" aria-label="{% trans 'Close lightbox' %}">
-        ✕ {% trans "Close (Esc)" %}
+      <button type="button" onclick="closeLightbox()" class="px-3.5 py-1.5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-sm font-medium transition" aria-label="{% trans 'Close lightbox' %}">
+        ✕ {% trans "Close" %}
       </button>
     </div>
 
     <div class="flex-1 flex items-center justify-center relative my-2 sm:my-4 max-w-6xl w-full mx-auto overflow-hidden">
-      <button type="button" onclick="stepLightbox(-1)" class="absolute left-1 sm:left-4 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-900/60 hover:bg-slate-900/90 text-white transition z-20 border border-white/20" aria-label="{% trans 'Previous photograph' %}">
+      <button type="button" onclick="stepLightbox(-1)" class="absolute left-2 sm:left-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white flex items-center justify-center transition z-20 border border-white/20 shadow-lg" aria-label="{% trans 'Previous' %}">
         ◀
       </button>
-      <div class="max-h-[72vh] w-full flex flex-col items-center justify-center px-10 sm:px-14">
-        <img id="lightbox-image" src="" alt="{% trans 'Event photograph' %}" class="max-h-[65vh] max-w-full object-contain rounded-lg shadow-2xl border border-white/15" />
+      <div class="max-h-[72vh] w-full flex flex-col items-center justify-center px-12 sm:px-16">
+        <img id="lightbox-image" src="" alt="{% trans 'Event photograph' %}" class="max-h-[65vh] max-w-full object-contain rounded-2xl shadow-2xl border border-white/15" />
       </div>
-      <button type="button" onclick="stepLightbox(1)" class="absolute right-1 sm:right-4 top-1/2 -translate-y-1/2 p-2.5 sm:p-3 rounded-full bg-slate-900/60 hover:bg-slate-900/90 text-white transition z-20 border border-white/20" aria-label="{% trans 'Next photograph' %}">
+      <button type="button" onclick="stepLightbox(1)" class="absolute right-2 sm:right-4 top-1/2 -translate-y-1/2 w-11 h-11 rounded-full bg-slate-900/80 hover:bg-slate-900 text-white flex items-center justify-center transition z-20 border border-white/20 shadow-lg" aria-label="{% trans 'Next' %}">
         ▶
       </button>
     </div>
 
-    <div class="max-w-3xl w-full mx-auto text-center text-white bg-white/5 border border-white/10 rounded-xl p-3 sm:p-3.5">
+    <div class="max-w-3xl w-full mx-auto text-center text-white bg-slate-900/90 border border-white/15 rounded-2xl p-4 shadow-xl">
       <p id="lightbox-caption" class="text-sm sm:text-base font-medium text-slate-100"></p>
-      <p id="lightbox-credit" class="text-xs text-amber-300/90 mt-1"></p>
+      <p id="lightbox-credit" class="text-xs text-cyan-300/90 mt-1"></p>
     </div>
   </div>
 
-  <!-- Global Generic / Principle Study Modal -->
-  <div id="generic-modal" class="fixed inset-0 z-50 hidden bg-slate-900/75 backdrop-blur-sm flex items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true">
-    <div class="bg-white rounded-2xl max-w-3xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-[#E6DEC8] overflow-hidden">
-      <div class="px-5 sm:px-6 py-4 bg-[#1B365D] text-white flex items-center justify-between">
-        <h3 id="generic-modal-title" class="text-base sm:text-lg font-bold font-heading text-white">{% trans "Details" %}</h3>
-        <button type="button" onclick="closeGenericModal()" class="text-white/80 hover:text-white px-2.5 py-1 rounded-lg bg-white/10 text-xs sm:text-sm">✕ {% trans "Close" %}</button>
+  <!-- Study Note Modal -->
+  <div id="generic-modal" class="fixed inset-0 z-50 hidden bg-slate-950/80 backdrop-blur-md flex items-center justify-center p-3 sm:p-4 overflow-y-auto" role="dialog" aria-modal="true">
+    <div class="bg-slate-900 text-white rounded-3xl max-w-2xl w-full max-h-[90vh] flex flex-col shadow-2xl border border-blue-500/30 overflow-hidden">
+      <div class="px-6 py-4 bg-gradient-to-r from-blue-700 via-blue-600 to-cyan-600 text-white flex items-center justify-between">
+        <h3 id="generic-modal-title" class="text-base sm:text-lg font-bold font-heading text-white">{% trans "Principle Details" %}</h3>
+        <button type="button" onclick="closeGenericModal()" class="text-white/80 hover:text-white px-2.5 py-1 rounded-lg bg-white/10 text-xs sm:text-sm">✕</button>
       </div>
-      <div id="generic-modal-body" class="p-4 sm:p-6 overflow-y-auto space-y-4 text-slate-700"></div>
+      <div id="generic-modal-body" class="p-6 overflow-y-auto space-y-4 text-slate-300 text-sm"></div>
     </div>
   </div>
 
-  <!-- Floating Background Meditation Music Player (Global) -->
+  <!-- Floating Music Player -->
   {% include "components/music_player.html" %}
 
-  <!-- Toast Container -->
-  <div id="toast-container" class="fixed bottom-4 right-4 left-4 sm:left-auto sm:bottom-5 sm:right-5 z-50 space-y-2 max-w-sm w-auto sm:w-full pointer-events-none" aria-live="polite"></div>
+  <div id="toast-container" class="fixed bottom-5 right-5 z-50 space-y-2 max-w-sm pointer-events-none"></div>
 
   <script src="{% static 'js/main.js' %}"></script>
   {% block extra_js %}{% endblock %}

@@ -4,68 +4,63 @@
 {% block title %}{% trans "About Us" %} — {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-12">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+  
   <!-- Header Intro Card -->
-  <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 border border-[#E6DEC8] shadow-sm space-y-6">
-    <span class="px-3 py-1 rounded-full bg-amber-100 text-[#1B365D] text-xs font-bold uppercase tracking-wider">{% trans "About Our Initiative" %}</span>
-    <h1 class="text-2xl sm:text-3xl lg:text-4xl font-bold text-[#1B365D] font-heading">{{ site_settings.site_name }} — {% trans "Spreading Buddha Dhamma for an Equal, Compassionate Society" %}</h1>
-    <p class="text-sm sm:text-base text-slate-700 leading-relaxed">
+  <div class="bg-slate-900/75 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-white/10 shadow-2xl space-y-6">
+    <span class="px-3.5 py-1.5 rounded-full bg-cyan-950 text-cyan-300 text-xs font-bold uppercase tracking-wider border border-cyan-500/30">{% trans "About Our Initiative" %}</span>
+    <h1 class="text-2xl sm:text-4xl font-extrabold text-white font-heading leading-tight">{{ site_settings.site_name }} — {% trans "Spreading Buddha Dhamma for an Equal, Compassionate Society" %}</h1>
+    <p class="text-sm sm:text-base text-slate-300 leading-relaxed">
       {{ site_settings.about_introduction }}
     </p>
 
     <!-- Mission & Vision Cards -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-6 pt-2">
-      <div class="p-5 sm:p-6 rounded-2xl bg-[#1B365D] text-white border border-[#0F2544] shadow-sm">
-        <span class="inline-block px-2.5 py-0.5 rounded bg-amber-400/20 text-amber-300 text-xs font-bold uppercase tracking-wider mb-2">{% trans "Our Mission" %}</span>
-        <h2 class="text-lg font-bold font-heading mb-2 text-white">{% trans "Mission" %}</h2>
-        <p class="text-sm text-slate-200 leading-relaxed">{{ site_settings.mission_statement }}</p>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-6 pt-2">
+      <div class="p-6 sm:p-8 rounded-2xl bg-gradient-to-br from-blue-700 via-indigo-800 to-slate-900 text-white shadow-xl border border-white/15">
+        <span class="inline-block px-2.5 py-1 rounded bg-white/15 text-cyan-300 text-xs font-bold uppercase tracking-wider mb-2">{% trans "Our Mission" %}</span>
+        <h2 class="text-xl font-bold font-heading mb-2 text-white">{% trans "Mission" %}</h2>
+        <p class="text-sm text-blue-100 leading-relaxed">{{ site_settings.mission_statement }}</p>
       </div>
-      <div class="p-5 sm:p-6 rounded-2xl bg-[#FAF7F0] border border-[#E6DEC8]">
-        <span class="inline-block px-2.5 py-0.5 rounded bg-amber-100 text-[#1B365D] text-xs font-bold uppercase tracking-wider mb-2">{% trans "Our Vision" %}</span>
-        <h2 class="text-lg font-bold text-[#1B365D] font-heading mb-2">{% trans "Vision" %}</h2>
-        <p class="text-sm text-slate-700 leading-relaxed">{{ site_settings.vision_statement }}</p>
+      <div class="p-6 sm:p-8 rounded-2xl bg-slate-900/80 border border-white/10">
+        <span class="inline-block px-2.5 py-1 rounded bg-blue-950 text-blue-300 text-xs font-bold uppercase tracking-wider mb-2 border border-blue-500/30">{% trans "Our Vision" %}</span>
+        <h2 class="text-xl font-bold text-white font-heading mb-2">{% trans "Vision" %}</h2>
+        <p class="text-sm text-slate-300 leading-relaxed">{{ site_settings.vision_statement }}</p>
       </div>
     </div>
   </div>
 
-  <!-- Purpose of Dhamma Education & Equality/Compassion -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-    <div class="bg-white rounded-2xl p-5 sm:p-7 border border-[#E6DEC8] shadow-sm space-y-3">
-      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Purpose of Dhamma Education" %}</h2>
-      <p class="text-sm text-slate-700 leading-relaxed">
-        {{ site_settings.about_purpose_of_dhamma }}
-      </p>
-      <div class="pt-2">
-        <a href="{% url 'education:principle_list' %}" class="inline-flex items-center gap-1 text-xs font-bold text-[#1B365D] hover:text-[#C87D20]">
+  <!-- Purpose & Equality -->
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-slate-900/70 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-white/10 shadow-xl space-y-3">
+      <h2 class="text-xl font-bold text-white font-heading">{% trans "Purpose of Dhamma Education" %}</h2>
+      <p class="text-sm text-slate-300 leading-relaxed">{{ site_settings.about_purpose_of_dhamma }}</p>
+      <div class="pt-3">
+        <a href="{% url 'education:principle_list' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-white transition">
           <span>{% blocktrans with count=principles_count %}Explore All {{ count }} Teacher Principles{% endblocktrans %}</span>
           <span>&rarr;</span>
         </a>
       </div>
     </div>
 
-    <div class="bg-white rounded-2xl p-5 sm:p-7 border border-[#E6DEC8] shadow-sm space-y-3">
-      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Equality &amp; Compassion" %}</h2>
-      <p class="text-sm text-slate-700 leading-relaxed">
-        {{ site_settings.about_equality_compassion }}
-      </p>
+    <div class="bg-slate-900/70 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-white/10 shadow-xl space-y-3">
+      <h2 class="text-xl font-bold text-white font-heading">{% trans "Equality &amp; Compassion" %}</h2>
+      <p class="text-sm text-slate-300 leading-relaxed">{{ site_settings.about_equality_compassion }}</p>
     </div>
   </div>
 
   <!-- Scientific Thinking & Objectives -->
-  <div class="grid grid-cols-1 md:grid-cols-2 gap-6 sm:gap-8">
-    <div class="bg-white rounded-2xl p-5 sm:p-7 border border-[#E6DEC8] shadow-sm space-y-3">
-      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Scientific Thinking &amp; Social Awareness" %}</h2>
-      <p class="text-sm text-slate-700 leading-relaxed">
-        {{ site_settings.about_scientific_thinking }}
-      </p>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <div class="bg-slate-900/70 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-white/10 shadow-xl space-y-3">
+      <h2 class="text-xl font-bold text-white font-heading">{% trans "Scientific Thinking &amp; Social Awareness" %}</h2>
+      <p class="text-sm text-slate-300 leading-relaxed">{{ site_settings.about_scientific_thinking }}</p>
     </div>
 
-    <div class="bg-white rounded-2xl p-5 sm:p-7 border border-[#E6DEC8] shadow-sm space-y-3">
-      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Educational Objectives" %}</h2>
-      <ul class="space-y-2 text-sm text-slate-700">
+    <div class="bg-slate-900/70 backdrop-blur-xl rounded-3xl p-6 sm:p-8 border border-white/10 shadow-xl space-y-3">
+      <h2 class="text-xl font-bold text-white font-heading">{% trans "Educational Objectives" %}</h2>
+      <ul class="space-y-2 text-sm text-slate-300">
         {% for objective in site_settings.objectives_list %}
           <li class="flex items-start gap-2">
-            <span class="text-[#D49B38] font-bold">•</span>
+            <span class="text-cyan-400 font-bold mt-0.5">•</span>
             <span>{{ objective }}</span>
           </li>
         {% endfor %}
@@ -74,33 +69,39 @@
   </div>
 
   <!-- Founder Profile Card -->
-  <div class="bg-[#1B365D] text-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 lg:p-10 shadow-md space-y-4">
-    <span class="text-xs font-bold uppercase tracking-wider text-amber-300">{% trans "Founder &amp; Educator Profile" %}</span>
-    <h2 class="text-2xl font-bold font-heading text-white">{{ site_settings.contact_person }}</h2>
-    <p class="text-sm sm:text-base text-slate-200 leading-relaxed">
+  <div class="rounded-3xl bg-gradient-to-r from-blue-700 via-indigo-800 to-slate-900 text-white p-6 sm:p-10 shadow-2xl border border-white/15 space-y-4 relative overflow-hidden">
+    <div class="absolute top-0 right-0 w-64 h-64 bg-cyan-400/10 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="flex items-center gap-4 relative z-10">
+      <div class="relative w-14 h-14 sm:w-16 sm:h-16 rounded-full p-0.5 bg-gradient-to-tr from-cyan-400 via-blue-400 to-indigo-300 shadow-xl shadow-cyan-500/20 flex-shrink-0">
+        <div class="w-full h-full rounded-full overflow-hidden bg-slate-950 flex items-center justify-center">
+          <img src="{% static 'images/logo.svg' %}" alt="{{ site_settings.contact_person }}" class="w-full h-full object-cover" />
+        </div>
+      </div>
+      <div>
+        <span class="text-xs font-bold uppercase tracking-wider text-cyan-300 block">{% trans "Founder &amp; Educator Profile" %}</span>
+        <h2 class="text-xl sm:text-2xl font-bold font-heading text-white mt-0.5">{{ site_settings.contact_person }}</h2>
+      </div>
+    </div>
+    <p class="text-sm sm:text-base text-blue-100 leading-relaxed relative z-10">
       <strong>{{ site_settings.contact_person }}</strong> {% trans "serves as the founder, Buddha Dhamma educator, and community organizer of 100% HUMANITY. His work focuses on practical Dhamma education, training community teachers across the 15 foundational principles, encouraging scientific thinking, and organizing inclusive community events." %}
     </p>
-    <div class="pt-3 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 text-sm text-amber-200">
-      <span><strong>{% trans "Email:" %}</strong> <a href="mailto:{{ site_settings.contact_email }}" class="underline break-all">{{ site_settings.contact_email }}</a></span>
-      <span><strong>{% trans "Phone:" %}</strong> <a href="tel:{{ site_settings.contact_phone }}" class="underline">{{ site_settings.contact_phone }}</a></span>
+    <div class="pt-3 flex flex-col sm:flex-row flex-wrap gap-3 sm:gap-6 text-sm text-cyan-200 relative z-10">
+      <span><strong>{% trans "Email:" %}</strong> <a href="mailto:{{ site_settings.contact_email }}" class="underline hover:text-white break-all">{{ site_settings.contact_email }}</a></span>
+      <span><strong>{% trans "Phone:" %}</strong> <a href="tel:{{ site_settings.contact_phone }}" class="underline hover:text-white font-mono">{{ site_settings.contact_phone }}</a></span>
       <span><strong>{% trans "YouTube:" %}</strong> {{ site_settings.youtube_channel_name }}</span>
     </div>
   </div>
 
   <!-- Privacy Policy and Terms of Use Anchors -->
-  <div class="bg-white rounded-2xl sm:rounded-3xl p-5 sm:p-8 border border-[#E6DEC8] shadow-sm space-y-6" id="privacy">
-    <h2 class="text-2xl font-bold text-[#1B365D] font-heading">{% trans "Ethical Guidelines &amp; Community Privacy Policy" %}</h2>
-    <div class="space-y-3 text-sm text-slate-700 leading-relaxed">
-      <h3 class="font-bold text-[#1B365D] text-base" id="terms">1. {% trans "Respectful Presentation of Buddha Dhamma &amp; Non-Certification Notice" %}</h3>
-      <p>
-        {% trans "The educational resources, study principles, and talks shared on 100% HUMANITY are provided for personal study, moral self-cultivation, and community development. This platform does not issue statutory accreditation or monastic ordination." %}
-      </p>
-      <h3 class="font-bold text-[#1B365D] text-base">2. {% trans "Community Photograph Consent &amp; Removal Policy" %}</h3>
-      <p>
-        {% trans "Photographs from community study circles, meditation sessions, and educational gatherings are published with respectful intent. If any attendee or parent wishes to request the removal of an image, please contact us immediately through our dedicated reporting channel." %}
-      </p>
+  <div class="bg-slate-900/70 backdrop-blur-xl rounded-3xl p-6 sm:p-10 border border-white/10 shadow-xl space-y-6" id="privacy">
+    <h2 class="text-2xl font-bold text-white font-heading">{% trans "Ethical Guidelines &amp; Community Privacy Policy" %}</h2>
+    <div class="space-y-4 text-sm text-slate-300 leading-relaxed">
+      <h3 class="font-bold text-white text-base" id="terms">1. {% trans "Respectful Presentation of Buddha Dhamma &amp; Non-Certification Notice" %}</h3>
+      <p>{% trans "The educational resources, study principles, and talks shared on 100% HUMANITY are provided for personal study, moral self-cultivation, and community development. This platform does not issue statutory accreditation or monastic ordination." %}</p>
+      <h3 class="font-bold text-white text-base">2. {% trans "Community Photograph Consent &amp; Removal Policy" %}</h3>
+      <p>{% trans "Photographs from community study circles, meditation sessions, and educational gatherings are published with respectful intent. If any attendee or parent wishes to request the removal of an image, please contact us immediately through our dedicated reporting channel." %}</p>
       <div class="pt-2">
-        <a href="{% url 'contact:contact' %}?type=report" class="px-4 py-2 rounded-xl bg-[#1B365D] text-white text-xs font-semibold hover:bg-[#0F2544] transition inline-block">
+        <a href="{% url 'contact:contact' %}" class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold shadow-md inline-block transition">
           {% trans "Submit Photo Removal or Content Report" %} &rarr;
         </a>
       </div>

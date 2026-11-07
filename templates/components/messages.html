@@ -1,18 +1,25 @@
 {% if messages %}
   <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-4 space-y-2" role="status" aria-live="polite">
     {% for message in messages %}
-      <div data-django-message="{{ message }}" data-django-tag="{{ message.tags|default:'info' }}" class="px-4 py-3 rounded-xl text-sm font-medium flex items-center justify-between gap-3 shadow-sm border-l-4
+      <div data-django-message="{{ message }}" data-django-tag="{{ message.tags|default:'info' }}" class="px-5 py-3.5 rounded-2xl text-sm font-medium flex items-center justify-between gap-3 shadow-sm border
         {% if message.tags == 'success' %}
-          bg-emerald-50 border-emerald-500 text-emerald-950
+          bg-emerald-50 border-emerald-200 text-emerald-900
         {% elif message.tags == 'warning' %}
-          bg-amber-50 border-amber-500 text-amber-950
+          bg-amber-50 border-amber-200 text-amber-900
         {% elif message.tags == 'error' %}
-          bg-red-50 border-red-500 text-red-950
+          bg-rose-50 border-rose-200 text-rose-900
         {% else %}
-          bg-[#FAF7F0] border-[#1B365D] text-[#1B365D]
+          bg-blue-50 border-blue-200 text-blue-900
         {% endif %}">
-        <span>{{ message }}</span>
-        <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold px-2 py-1 opacity-70 hover:opacity-100" aria-label="Dismiss message">✕</button>
+        <div class="flex items-center gap-2.5">
+          <span class="w-2 h-2 rounded-full 
+            {% if message.tags == 'success' %}bg-emerald-500
+            {% elif message.tags == 'warning' %}bg-amber-500
+            {% elif message.tags == 'error' %}bg-rose-500
+            {% else %}bg-blue-500{% endif %}"></span>
+          <span>{{ message }}</span>
+        </div>
+        <button type="button" onclick="this.parentElement.remove()" class="text-xs font-bold px-2 py-1 text-slate-400 hover:text-slate-700 transition" aria-label="Dismiss message">✕</button>
       </div>
     {% endfor %}
   </div>

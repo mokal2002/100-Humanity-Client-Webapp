@@ -4,65 +4,71 @@
 {% block title %}{% trans "Photo Gallery" %} — {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
-<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-8">
-  <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-    <div>
-      <span class="text-xs font-bold uppercase tracking-wider text-[#C87D20]">{% trans "Community Visual Archive" %}</span>
-      <h1 class="text-3xl font-bold text-[#1B365D] font-heading mt-1">{% trans "Photo Gallery &amp; Albums" %}</h1>
-      <p class="text-sm text-slate-600 mt-1">{% trans "Browse photographs from 100% HUMANITY study circles, meditation sessions, and community gatherings." %}</p>
+<div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-12">
+  
+  <!-- Header Banner -->
+  <div class="rounded-3xl bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 text-white p-8 sm:p-12 lg:p-14 shadow-2xl relative overflow-hidden border border-white/15">
+    <div class="absolute -top-20 -right-20 w-96 h-96 bg-cyan-500/15 rounded-full blur-3xl pointer-events-none"></div>
+    <div class="flex flex-col sm:flex-row sm:items-end justify-between gap-6 relative z-10">
+      <div class="space-y-3 max-w-2xl">
+        <span class="px-3.5 py-1 rounded-full bg-blue-500/20 text-cyan-300 text-xs font-bold uppercase tracking-widest border border-blue-400/30">{% trans "Visual Archive" %}</span>
+        <h1 class="text-3xl sm:text-4xl lg:text-5xl font-extrabold font-heading text-white tracking-tight">{% trans "Photo Gallery &amp; Albums" %}</h1>
+        <p class="text-sm sm:text-base text-slate-300 leading-relaxed font-normal">{% trans "Browse photographs from 100% HUMANITY study circles, meditation sessions, and community gatherings." %}</p>
+      </div>
+      {% if user.is_staff %}
+        <a href="{% url 'gallery:bulk_upload' %}" class="px-6 py-3.5 rounded-2xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-500 hover:to-cyan-500 text-white text-xs font-bold shadow-xl shadow-blue-500/30 transition self-start sm:self-auto flex-shrink-0">
+          {% trans "+ Bulk Upload Photos" %}
+        </a>
+      {% endif %}
     </div>
-    {% if user.is_staff %}
-      <a href="{% url 'gallery:bulk_upload' %}" class="px-4 py-2.5 rounded-xl bg-[#1B365D] hover:bg-[#0F2544] text-white text-xs font-semibold shadow-sm transition self-start sm:self-auto">
-        {% trans "+ Upload Multiple Photos" %}
-      </a>
-    {% endif %}
   </div>
 
+  <!-- Filter Category Pills -->
   {% if categories %}
-    <div class="bg-white rounded-2xl p-3 sm:p-4 border border-[#E6DEC8] shadow-sm flex items-center gap-2 overflow-x-auto no-scrollbar flex-nowrap sm:flex-wrap pb-2" role="navigation" aria-label="{% trans 'Album Categories' %}">
-      <a href="{% url 'gallery:album_list' %}" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if not selected_category %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
+    <div class="bg-slate-900/70 backdrop-blur-xl rounded-2xl p-3 border border-white/10 shadow-lg flex items-center gap-2 overflow-x-auto pb-2" role="navigation" aria-label="{% trans 'Album Categories' %}">
+      <a href="{% url 'gallery:album_list' %}" class="shrink-0 px-4 py-2 rounded-xl text-xs font-semibold transition {% if not selected_category %}bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md{% else %}bg-slate-800 text-slate-300 hover:bg-slate-700{% endif %}">
         {% trans "All Categories" %}
       </a>
       {% for cat in categories %}
-        <a href="{% url 'gallery:album_list' %}?category={{ cat|urlencode }}" class="shrink-0 px-3.5 py-1.5 rounded-full text-xs font-semibold transition {% if selected_category == cat %}bg-[#1B365D] text-white{% else %}bg-slate-100 text-slate-700 hover:bg-slate-200{% endif %}">
+        <a href="{% url 'gallery:album_list' %}?category={{ cat|urlencode }}" class="shrink-0 px-4 py-2 rounded-xl text-xs font-semibold transition {% if selected_category == cat %}bg-gradient-to-r from-blue-600 to-cyan-600 text-white shadow-md{% else %}bg-slate-800 text-slate-300 hover:bg-slate-700{% endif %}">
           {{ cat }}
         </a>
       {% endfor %}
     </div>
   {% endif %}
 
-  <!-- Photo Albums Section -->
+  <!-- Photo Albums -->
   {% if albums %}
-    <div class="space-y-4">
-      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Photo Albums" %}</h2>
+    <div class="space-y-6">
+      <h2 class="text-2xl font-bold text-white font-heading">{% trans "Featured Albums" %}</h2>
       <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {% for album in albums %}
-          <article class="bg-white rounded-2xl overflow-hidden border border-[#E6DEC8] shadow-sm hover:shadow-md transition flex flex-col justify-between">
+          <article class="bg-slate-900/70 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 shadow-xl hover:border-cyan-400/40 transition-all duration-300 flex flex-col justify-between group">
             <div>
-              <div class="relative h-48 bg-slate-200">
+              <div class="relative h-56 bg-slate-950 overflow-hidden">
                 {% if album.effective_cover_url %}
                   <a href="{{ album.get_absolute_url }}">
-                    <img src="{{ album.effective_cover_url }}" alt="{{ album.title }}" loading="lazy" class="w-full h-full object-cover" />
+                    <img src="{{ album.effective_cover_url }}" alt="{{ album.title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
                   </a>
                 {% else %}
-                  <div class="w-full h-full bg-[#1B365D] flex items-center justify-center text-[#D49B38] text-4xl font-bold">☸</div>
+                  <div class="w-full h-full bg-gradient-to-br from-blue-900 via-indigo-950 to-slate-950 flex items-center justify-center text-cyan-400 text-5xl font-bold">☸</div>
                 {% endif %}
-                <span class="absolute top-3 left-3 px-2.5 py-1 rounded-md text-xs font-semibold bg-[#1B365D] text-white">
+                <span class="absolute top-3.5 left-3.5 px-3 py-1 rounded-lg text-xs font-bold bg-blue-600/90 text-white backdrop-blur-sm">
                   {{ album.category }}
                 </span>
-                <span class="absolute bottom-3 left-3 px-2 py-0.5 rounded text-xs bg-slate-900/80 text-white font-medium">
+                <span class="absolute bottom-3.5 left-3.5 px-2.5 py-1 rounded-md text-xs bg-slate-950/80 text-white font-medium">
                   {{ album.published_photos_count }} {% trans "photos" %}
                 </span>
               </div>
               <div class="p-6">
-                <h3 class="text-base font-bold text-[#1B365D] font-heading mb-1.5">
-                  <a href="{{ album.get_absolute_url }}" class="hover:text-[#C87D20]">{{ album.title }}</a>
+                <h3 class="text-lg font-bold text-white font-heading group-hover:text-cyan-400 transition-colors mb-2">
+                  <a href="{{ album.get_absolute_url }}">{{ album.title }}</a>
                 </h3>
-                <p class="text-sm text-slate-600 line-clamp-2 leading-relaxed">{{ album.description|truncatewords:18 }}</p>
+                <p class="text-sm text-slate-300 line-clamp-2 leading-relaxed">{{ album.description|truncatewords:18 }}</p>
               </div>
             </div>
             <div class="p-6 pt-0">
-              <a href="{{ album.get_absolute_url }}" class="w-full block text-center px-4 py-2 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8] text-xs font-bold text-[#1B365D] hover:bg-amber-50 transition">
+              <a href="{{ album.get_absolute_url }}" class="w-full block text-center py-3 rounded-xl bg-slate-950 border border-white/10 text-xs font-bold text-slate-300 hover:text-white hover:border-cyan-400/40 transition">
                 {% trans "Open Album" %} &rarr;
               </a>
             </div>
@@ -74,20 +80,20 @@
 
   <!-- Recent Photographs Grid with Lightbox -->
   {% if page_obj and page_obj.object_list %}
-    <div class="space-y-4 pt-6 border-t border-slate-200">
-      <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Recent Photographs" %}</h2>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
+    <div class="space-y-6 pt-6 border-t border-white/10">
+      <h2 class="text-2xl font-bold text-white font-heading">{% trans "Recent Photographs" %}</h2>
+      <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4" id="gallery-grid">
         {% for photo in page_obj %}
-          <div class="bg-white rounded-xl overflow-hidden border border-[#E6DEC8] shadow-sm group">
-            <div class="relative h-44 bg-slate-100 overflow-hidden cursor-pointer" onclick="openSingleLightbox('{{ photo.image_url }}', '{{ photo.title|escapejs }}', '{{ photo.album.title|escapejs }}')">
-              <img src="{{ photo.image_url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
-              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/70 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-2.5 text-white">
+          <div class="bg-slate-900/70 backdrop-blur-md rounded-2xl overflow-hidden border border-white/10 shadow-lg group">
+            <div class="relative h-48 bg-slate-950 overflow-hidden cursor-pointer" onclick="openSingleLightbox('{{ photo.image_url }}', '{{ photo.title|escapejs }}', '{{ photo.album.title|escapejs }}')">
+              <img src="{{ photo.image_url }}" alt="{{ photo.alt_text|default:photo.title }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" />
+              <div class="absolute inset-0 bg-gradient-to-t from-slate-950/80 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition flex items-end p-3 text-white">
                 <span class="text-xs font-medium">🔍 {% trans "View Full Size" %}</span>
               </div>
             </div>
-            <div class="p-3">
-              <h4 class="font-bold text-xs text-[#1B365D] line-clamp-1">{{ photo.title }}</h4>
-              <p class="text-[11px] text-slate-500 mt-0.5 line-clamp-1">{{ photo.album.title }}</p>
+            <div class="p-4">
+              <h4 class="font-bold text-xs text-white truncate">{{ photo.title }}</h4>
+              <p class="text-[11px] text-slate-400 mt-0.5 truncate">{{ photo.album.title }}</p>
             </div>
           </div>
         {% endfor %}
@@ -96,8 +102,8 @@
       {% include "components/pagination.html" %}
     </div>
   {% elif not albums %}
-    <div class="bg-white rounded-2xl p-10 text-center border border-[#E6DEC8] text-slate-600">
-      <h2 class="text-lg font-bold text-[#1B365D]">{% trans "No Photo Albums Published Yet" %}</h2>
+    <div class="bg-slate-900/70 rounded-3xl p-12 text-center border border-white/10 text-slate-400">
+      <h2 class="text-lg font-bold text-white">{% trans "No Photo Albums Published Yet" %}</h2>
       <p class="text-sm mt-1">{% trans "Photographs will be published after our upcoming community sessions." %}</p>
     </div>
   {% endif %}
@@ -108,14 +114,12 @@
     var modal = document.getElementById('lightbox-modal');
     var imgEl = document.getElementById('lightbox-image');
     var albumEl = document.getElementById('lightbox-album-title');
-    var counterEl = document.getElementById('lightbox-counter');
     var capEl = document.getElementById('lightbox-caption');
     if (!modal || !imgEl) return;
 
     imgEl.src = imgUrl;
     imgEl.alt = caption;
     if (albumEl) albumEl.textContent = albumTitle || 'Photo Gallery';
-    if (counterEl) counterEl.textContent = '';
     if (capEl) capEl.textContent = caption || '';
     modal.classList.remove('hidden');
   }

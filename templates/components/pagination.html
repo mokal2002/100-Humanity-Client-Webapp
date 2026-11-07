@@ -1,18 +1,18 @@
 {% load i18n %}
 {% if page_obj and page_obj.paginator.num_pages > 1 %}
-  <nav class="flex items-center justify-center gap-2 pt-6" aria-label="{% trans 'Pagination' %}">
+  <nav class="flex items-center justify-center gap-3 pt-8" aria-label="{% trans 'Pagination' %}">
     {% if page_obj.has_previous %}
-      <a class="px-3.5 py-2 rounded-xl bg-white border border-[#E6DEC8] text-xs sm:text-sm font-semibold text-[#1B365D] hover:bg-amber-50 transition" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}{% if selected_category %}&amp;category={{ selected_category|urlencode }}{% endif %}{% if selected_tag %}&amp;tag={{ selected_tag|urlencode }}{% endif %}{% if period_filter and period_filter != 'all' %}&amp;period={{ period_filter|urlencode }}{% endif %}">
+      <a class="px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-xs sm:text-sm font-semibold text-slate-300 hover:text-white hover:border-cyan-400/40 shadow-md transition" href="?page={{ page_obj.previous_page_number }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}{% if selected_category %}&amp;category={{ selected_category|urlencode }}{% endif %}{% if selected_tag %}&amp;tag={{ selected_tag|urlencode }}{% endif %}{% if period_filter and period_filter != 'all' %}&amp;period={{ period_filter|urlencode }}{% endif %}">
         &laquo; {% trans "Previous" %}
       </a>
     {% endif %}
 
-    <span class="px-4 py-2 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8] text-xs sm:text-sm font-bold text-[#1B365D]">
+    <span class="px-5 py-2.5 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 text-xs sm:text-sm font-bold text-white shadow-lg shadow-blue-500/20">
       {% blocktrans with current=page_obj.number total=page_obj.paginator.num_pages %}Page {{ current }} of {{ total }}{% endblocktrans %}
     </span>
 
     {% if page_obj.has_next %}
-      <a class="px-3.5 py-2 rounded-xl bg-white border border-[#E6DEC8] text-xs sm:text-sm font-semibold text-[#1B365D] hover:bg-amber-50 transition" href="?page={{ page_obj.next_page_number }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}{% if selected_category %}&amp;category={{ selected_category|urlencode }}{% endif %}{% if selected_tag %}&amp;tag={{ selected_tag|urlencode }}{% endif %}{% if period_filter and period_filter != 'all' %}&amp;period={{ period_filter|urlencode }}{% endif %}">
+      <a class="px-4 py-2.5 rounded-xl bg-slate-900 border border-white/10 text-xs sm:text-sm font-semibold text-slate-300 hover:text-white hover:border-cyan-400/40 shadow-md transition" href="?page={{ page_obj.next_page_number }}{% if search_query %}&amp;q={{ search_query|urlencode }}{% endif %}{% if selected_category %}&amp;category={{ selected_category|urlencode }}{% endif %}{% if selected_tag %}&amp;tag={{ selected_tag|urlencode }}{% endif %}{% if period_filter and period_filter != 'all' %}&amp;period={{ period_filter|urlencode }}{% endif %}">
         {% trans "Next" %} &raquo;
       </a>
     {% endif %}

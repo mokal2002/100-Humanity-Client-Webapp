@@ -4,18 +4,22 @@
 {% block title %}{% trans "Server Error (500)" %} — {{ site_settings.site_name }}{% endblock %}
 
 {% block content %}
-<div class="max-w-xl mx-auto px-4 py-20 text-center">
-  <div class="bg-white rounded-3xl p-8 sm:p-10 border border-[#E6DEC8] shadow-sm space-y-5">
-    <div class="w-14 h-14 rounded-full bg-red-100 text-red-700 font-bold text-xl flex items-center justify-center mx-auto">500</div>
-    <h1 class="text-2xl sm:text-3xl font-bold text-[#1B365D] font-heading">{% trans "Server Error" %}</h1>
-    <p class="text-sm text-slate-600 leading-relaxed">
-      {% trans "An unexpected internal server error occurred. Please try again shortly or contact the administrator." %}
-    </p>
+<div class="max-w-xl mx-auto px-4 py-24 text-center">
+  <div class="bg-white rounded-3xl p-8 sm:p-12 border border-slate-200/80 shadow-xl space-y-6">
+    <div class="w-16 h-16 rounded-2xl bg-rose-50 text-rose-600 font-extrabold text-2xl flex items-center justify-center mx-auto border border-rose-100 shadow-sm">
+      500
+    </div>
+    <div class="space-y-2">
+      <h1 class="text-2xl sm:text-3xl font-extrabold text-slate-900 font-heading">{% trans "Server Error" %}</h1>
+      <p class="text-sm text-slate-600 leading-relaxed max-w-md mx-auto">
+        {% trans "An unexpected internal server error occurred. Please try again shortly or contact the administrator." %}
+      </p>
+    </div>
     <div class="pt-2 flex justify-center gap-3 flex-wrap">
-      <a href="{% url 'core:home' %}" class="px-5 py-2.5 rounded-xl bg-[#1B365D] hover:bg-[#0F2544] text-white text-xs font-bold transition">
+      <a href="{% url 'core:home' %}" class="px-6 py-3 rounded-xl bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white text-xs font-bold shadow-md shadow-blue-500/20 transition">
         {% trans "Return to Homepage" %}
       </a>
-      <a href="{% url 'contact:contact' %}" class="px-5 py-2.5 rounded-xl bg-[#FAF7F0] border border-[#E6DEC8] text-[#1B365D] text-xs font-semibold hover:bg-amber-50 transition">
+      <a href="{% url 'contact:contact' %}" class="px-6 py-3 rounded-xl bg-slate-50 border border-slate-200 text-slate-700 text-xs font-semibold hover:bg-slate-100 transition">
         {% trans "Contact Us" %}
       </a>
     </div>

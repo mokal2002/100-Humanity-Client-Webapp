@@ -5,78 +5,79 @@
 {% block meta_description %}{{ event.description|truncatewords:28 }}{% endblock %}
 
 {% block content %}
-<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12 space-y-6">
+<div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 space-y-8">
   <div>
-    <a href="{% url 'events:event_list' %}" class="text-xs font-bold text-[#1B365D] hover:text-[#C87D20]">
-      &larr; {% trans "Back to All Events" %}
+    <a href="{% url 'events:event_list' %}" class="inline-flex items-center gap-1.5 text-xs font-bold text-cyan-400 hover:text-white transition">
+      <span>&larr;</span>
+      <span>{% trans "Back to All Events" %}</span>
     </a>
   </div>
 
-  <article class="bg-white rounded-3xl overflow-hidden border border-[#E6DEC8] shadow-sm">
+  <article class="bg-slate-900/75 backdrop-blur-xl rounded-3xl overflow-hidden border border-white/10 shadow-2xl">
     {% if event.cover_image_url %}
-      <div class="h-72 sm:h-96 bg-slate-200 relative overflow-hidden">
+      <div class="h-72 sm:h-96 bg-slate-950 relative overflow-hidden">
         <img src="{{ event.cover_image_url }}" alt="{{ event.title }}" class="w-full h-full object-cover" />
-        <span class="absolute top-4 left-4 px-3 py-1 rounded-lg text-xs font-semibold text-white {% if event.is_upcoming %}bg-emerald-700{% else %}bg-slate-800/90{% endif %}">
+        <span class="absolute top-4 left-4 px-3.5 py-1.5 rounded-lg text-xs font-bold text-white {% if event.is_upcoming %}bg-emerald-600{% else %}bg-slate-950/90{% endif %} backdrop-blur-sm">
           {% if event.is_upcoming %}{% trans "Upcoming Event" %}{% else %}{% trans "Past Event" %}{% endif %}
         </span>
       </div>
     {% endif %}
 
-    <div class="p-8 sm:p-10 space-y-6">
+    <div class="p-8 sm:p-12 space-y-8">
       <div>
-        <div class="text-xs font-semibold text-[#C87D20] mb-1">
+        <div class="text-xs font-semibold text-cyan-400 mb-2">
           {{ event.start_date|date:"l, F j, Y" }}{% if event.end_date and event.end_date != event.start_date %} &ndash; {{ event.end_date|date:"l, F j, Y" }}{% endif %}
         </div>
-        <h1 class="text-2xl sm:text-3xl font-bold text-[#1B365D] font-heading">{{ event.title }}</h1>
+        <h1 class="text-2xl sm:text-4xl font-extrabold text-white font-heading leading-tight">{{ event.title }}</h1>
       </div>
 
       <!-- Quick Info Grid -->
-      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 rounded-2xl bg-[#FAF7F0] border border-[#E6DEC8]">
-        <div class="space-y-2 text-sm text-slate-700">
-          <p><strong>{% trans "Date:" %}</strong> {{ event.start_date|date:"l, F j, Y" }}{% if event.end_date and event.end_date != event.start_date %} to {{ event.end_date|date:"l, F j, Y" }}{% endif %}</p>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6 sm:p-8 rounded-2xl bg-slate-950/80 border border-white/10">
+        <div class="space-y-2.5 text-sm text-slate-300">
+          <p><strong class="text-white">{% trans "Date:" %}</strong> {{ event.start_date|date:"l, F j, Y" }}{% if event.end_date and event.end_date != event.start_date %} to {{ event.end_date|date:"l, F j, Y" }}{% endif %}</p>
           {% if event.start_time %}
-            <p><strong>{% trans "Time:" %}</strong> {{ event.start_time|time:"g:i A" }}{% if event.end_time %} &ndash; {{ event.end_time|time:"g:i A" }}{% endif %}</p>
+            <p><strong class="text-white">{% trans "Time:" %}</strong> {{ event.start_time|time:"g:i A" }}{% if event.end_time %} &ndash; {{ event.end_time|time:"g:i A" }}{% endif %}</p>
           {% endif %}
-          <p><strong>{% trans "Venue:" %}</strong> {{ event.venue }}</p>
+          <p><strong class="text-white">{% trans "Venue:" %}</strong> {{ event.venue }}</p>
           {% if event.map_link %}
-            <p class="pt-1">
-              <a href="{{ event.map_link }}" target="_blank" rel="noopener noreferrer" class="px-3.5 py-1.5 rounded-lg bg-white border border-[#E6DEC8] text-xs font-semibold text-[#1B365D] hover:bg-amber-50 inline-block">
+            <div class="pt-2">
+              <a href="{{ event.map_link }}" target="_blank" rel="noopener noreferrer" class="px-4 py-2 rounded-xl bg-slate-900 border border-white/15 text-xs font-bold text-cyan-400 hover:text-white hover:border-cyan-400/40 inline-block shadow-md transition">
                 {% trans "Open Map Directions" %} &nearr;
               </a>
-            </p>
+            </div>
           {% endif %}
         </div>
-        <div class="space-y-2 text-sm text-slate-700">
-          <p><strong>{% trans "Participation &amp; Inquiries:" %}</strong></p>
-          <p class="text-xs sm:text-sm text-slate-600 leading-relaxed">{{ event.registration_info }}</p>
-          <div class="pt-2 text-xs text-slate-600 border-t border-slate-200">
+        <div class="space-y-2.5 text-sm text-slate-300">
+          <p><strong class="text-white">{% trans "Participation &amp; Inquiries:" %}</strong></p>
+          <p class="text-xs sm:text-sm text-slate-400 leading-relaxed">{{ event.registration_info }}</p>
+          <div class="pt-3 text-xs text-slate-400 border-t border-white/10">
             <strong>{{ site_settings.contact_person }}:</strong>
-            <a href="tel:{{ site_settings.contact_phone }}" class="text-[#1B365D] font-bold">{{ site_settings.contact_phone }}</a> •
-            <a href="mailto:{{ site_settings.contact_email }}" class="text-[#1B365D] underline">{{ site_settings.contact_email }}</a>
+            <a href="tel:{{ site_settings.contact_phone }}" class="text-cyan-400 font-bold font-mono">{{ site_settings.contact_phone }}</a> •
+            <a href="mailto:{{ site_settings.contact_email }}" class="text-cyan-400 underline">{{ site_settings.contact_email }}</a>
           </div>
         </div>
       </div>
 
       <!-- Description -->
-      <div class="space-y-3">
-        <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Program Description" %}</h2>
-        <div class="prose max-w-none text-slate-700 leading-relaxed text-sm sm:text-base">
+      <div class="space-y-4">
+        <h2 class="text-xl font-bold text-white font-heading">{% trans "Program Description" %}</h2>
+        <div class="prose max-w-none text-slate-300 leading-relaxed text-sm sm:text-base space-y-4">
           {{ event.description|linebreaks }}
         </div>
       </div>
 
       <!-- Additional Photographs -->
       {% if event.additional_images.all %}
-        <div class="pt-4 border-t border-slate-100 space-y-4">
-          <h2 class="text-xl font-bold text-[#1B365D] font-heading">{% trans "Event Photographs" %}</h2>
-          <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
+        <div class="pt-6 border-t border-white/10 space-y-4">
+          <h2 class="text-xl font-bold text-white font-heading">{% trans "Event Photographs" %}</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-4">
             {% for img in event.additional_images.all %}
-              <div class="rounded-xl overflow-hidden border border-[#E6DEC8] bg-slate-100 cursor-pointer group" onclick="openSingleLightbox('{{ img.image_url }}', '{{ img.caption|default:img.alt_text|escapejs }}', '{{ event.title|escapejs }}')">
-                <div class="h-44 overflow-hidden">
+              <div class="rounded-2xl overflow-hidden border border-white/10 bg-slate-950 cursor-pointer group" onclick="openSingleLightbox('{{ img.image_url }}', '{{ img.caption|default:img.alt_text|escapejs }}', '{{ event.title|escapejs }}')">
+                <div class="h-48 overflow-hidden">
                   <img src="{{ img.image_url }}" alt="{{ img.alt_text }}" loading="lazy" class="w-full h-full object-cover group-hover:scale-105 transition duration-300" />
                 </div>
                 {% if img.caption %}
-                  <div class="p-2.5 text-xs text-slate-700 font-medium bg-white border-t border-slate-100">
+                  <div class="p-3 text-xs text-slate-300 font-medium bg-slate-900 border-t border-white/10">
                     {{ img.caption }}
                   </div>
                 {% endif %}
@@ -94,14 +95,12 @@
     var modal = document.getElementById('lightbox-modal');
     var imgEl = document.getElementById('lightbox-image');
     var albumEl = document.getElementById('lightbox-album-title');
-    var counterEl = document.getElementById('lightbox-counter');
     var capEl = document.getElementById('lightbox-caption');
     if (!modal || !imgEl) return;
 
     imgEl.src = imgUrl;
     imgEl.alt = caption;
     if (albumEl) albumEl.textContent = albumTitle || 'Photo Gallery';
-    if (counterEl) counterEl.textContent = '';
     if (capEl) capEl.textContent = caption || '';
     modal.classList.remove('hidden');
   }
